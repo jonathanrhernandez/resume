@@ -88,9 +88,7 @@
                 border: none !important;
             }
             .chart-container {
-                height: auto !important;
-                max-height: none !important;
-                margin-bottom: 20px; /* Add some margin below chart for print */
+                display: none !important; /* Hide chart in print */
             }
             canvas {
                 width: 100% !important;
@@ -131,6 +129,21 @@
             .print-contact-details p span {
                 font-size: 0.7rem !important; /* Even smaller font for URLs */
                 word-break: break-all; /* Allow long URLs to wrap */
+            }
+
+            /* General print spacing and page breaks */
+            h2, h3 {
+                page-break-after: avoid !important; /* Prevents title from being orphaned at bottom of page */
+            }
+            p {
+                margin-bottom: 0.5em !important; /* Reduce space between paragraphs */
+            }
+            /* Explicitly show tools-tech-title in print if key-competencies-title is hidden */
+            #key-competencies-title {
+                display: none !important; /* Hide key competencies title in print */
+            }
+            #tools-tech-title {
+                display: block !important; /* Ensure tools tech title is visible in print */
             }
         }
 
@@ -243,6 +256,7 @@
                 <h2 class="text-3xl font-bold text-slate-800 mb-2" id="skills-title"></h2>
                 <p class="text-lg text-slate-600 mb-8" id="skills-subtitle"></p>
                 <div class="bg-white p-8 rounded-2xl shadow-sm mb-8">
+                    <!-- The chart container and key competencies title are hidden in print -->
                     <h3 class="text-2xl font-bold text-slate-800 mb-4" id="key-competencies-title"></h3>
                     <div class="chart-container">
                         <canvas id="skillsChart"></canvas>
