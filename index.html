@@ -105,11 +105,18 @@
                 background-color: #000 !important;
                 border-color: #fff !important;
             }
-            /* Reduce margin between timeline items (projects) */
+            /* Reduce margin between timeline items (companies/roles) */
             .timeline-item {
-                margin-bottom: 1.5em !important; /* Reduced vertical space between projects */
+                margin-bottom: 1em !important; /* General space between different companies/roles */
             }
             .timeline-item:last-child {
+                margin-bottom: 0 !important;
+            }
+            /* Reduce space between individual project cards within a company */
+            .timeline-item > div.mt-4.space-y-6 > div { /* Target specific project cards */
+                margin-bottom: 0.5em !important; /* Reduced vertical space between project cards */
+            }
+            .timeline-item > div.mt-4.space-y-6 > div:last-child {
                 margin-bottom: 0 !important;
             }
             
@@ -145,7 +152,7 @@
             p {
                 margin-bottom: 0.5em !important; /* Reduce space between paragraphs */
             }
-            /* Explicitly show tools-tech-title in print if key-competencies-title is hidden */
+            /* Explicitly hide key-competencies-title in print */
             #key-competencies-title {
                 display: none !important; /* Hide key competencies title in print */
             }
@@ -484,8 +491,8 @@ const content = {
                         { title: "AI-Powered Facial Access Control Project (June 2025 - Present)", description: `Contributed to all phases of the development cycle (design, development, testing) of an **office access control system with facial identification**, leveraging Artificial Intelligence tools to optimize the process, achieving **development acceleration of 35-50%** and **process efficiency improvement of 30-45%**. Actively utilized platforms such as **bolt.new, V0, Gemini, ChatGPT, and Cursor** for design and development. Developed the front-end with **React** and the back-end with **Supabase Edge Functions**, using **Supabase** as the database, ensuring a modern and scalable architecture. Collaborated in an autonomous team where the implementation of AI tools has **optimized feature delivery** and **fostered a continuous innovation environment**.` },
                         { title: "Norden Delivery KPIs Project (April 2025 - June 2025)", description: `Designed and developed a **KPI Module** connected to Jira, GitHub, and Bitbucket via their APIs to obtain key metrics. Created a **Financial Dashboard** visualizing client payments versus employee salaries, **facilitating strategic and financial decision-making by 15-25%**. **Improved visibility of critical metrics by 70-80%**, enabling more agile, data-driven decisions that positively impacted profitability.` },
                         { title: "Mosaic Project (March 2024 - April 2025)", description: `Led key projects to enhance the strategic finance platform, focusing on financial data integration and management, resulting in a **15-25% improvement in data processing efficiency** and a **10-20% reduction in manual errors**. Implemented **Export to Google Sheets** functionality, optimizing reports for **50-100 users/teams**. Developed a **Google Sheets Add-on** to directly connect metrics and reports, **reducing the time of report preparation by 20-30%**. Delivered **ETL Connectors** (BigQuery, Redshift, Xero, Snowflake, Sage Intacct) for efficient data transformation and loading, **improving data quality by 15-25%** and **expediting access to critical information**. Responsible for defining and prioritizing requirements, coordinating technical teams and validations, and ensuring high-quality deliverables aligned with client needs.` },
-                        { title: "WellFit Project", description: `Led the front-end development of an innovative system for dental clinics, ensuring efficient integration with the backend via APIs. Managed functional requirement definition and prioritization, ensuring intuitive interfaces that **improved operational efficiency by 20-30%**. Coordinated the implementation of components visual and functional for managing users, administrative roles, and clinical records, **reducing the time of record management by 15-25%**. Ensured payment module integration, including banking credit systems, **processing over 500+ transactions monthly**. Served as a key facilitator in cross-functional communication between designers, developers, and stakeholders, **accelerating the delivery cycle by 10-15%**.` },
-                        { title: "Wellness Project", description: `Led the development of an innovative web application to improve user health through voice interaction, OCR-based clinical document analysis, and AI-powered personalized meal plans. Developed clear functional and non-functional requirements, **increasing backlog clarity by 20-30%**. Designed development strategies and coordinated incremental deliveries, **reducing the time to launch new features by 15-25%**. Supervisó la integración de tecnologías de reconocimiento de voz y OCR, asegurando un **rendimiento óptimo en la extracción y análisis de miles de datos clínicos**. Gestioné ceremonias Agile, **mejorando la eficiencia del equipo en un 10-20%**. Validé funcionalidades clave como la generación de planes alimenticios, contribuyendo a **mejorar los hábitos alimenticios de cientos de usuarios**.` },
+                        { title: "WellFit Project", description: `Led the front-end development of an innovative system for dental clinics, ensuring efficient integration with the backend via APIs. Managed functional requirement definition and prioritization, ensuring intuitive interfaces that **improved operational efficiency by 20-30%**. Coordinated the implementation of components visual and functional for managing users, administrative roles, and clinical records, **reducing the time of record management by 15-25%**. Ensured payment module integration, including banking credit systems, **processing over 500+ transactions monthly**. Served as a key facilitator in cross-functional communication between designers, developers, and stakeholders, **acelerating el ciclo de entrega en un 10-15%**.` },
+                        { title: "Wellness Project", description: `Led the development of an innovative web application to improve user health through voice interaction, OCR-based clinical document analysis, and AI-powered personalized meal plans. Developed clear functional and non-functional requirements, **increasing backlog clarity by 20-30%**. Designed development strategies and coordinated incremental deliveries, **reducing the time to launch new features by 15-25%**. Oversaw voice recognition and OCR technology integration, ensuring **optimal performance in extracting and analyzing thousands of clinical data points**. Managed Agile ceremonies, **improving team efficiency by 10-20%**. Validated key functionalities like personalized meal plan generation, contributing to **improving dietary habits for hundreds of users**.` },
                         { title: "OCR Project for INE Data Extraction", description: `Participated as Product Owner in an OCR project to extract information from users' voter ID cards (INE) via photos or direct image uploads. Designed and oversaw work cycles, **ensuring high-quality deliverables within established timelines**. Created functional and non-functional specifications in INVEST format, **improving project scope understanding by 20-30%**. Administrated the backlog, **optimizing workflow for the engineering team and 5-7 team members**. Oversaw data extraction testing, **improving accuracy in critical information capture by 95-99%**. Achieved an automated workflow that **optimized data capture and reduced identity validation time by 40-60%**.` },
                         { title: "Drata Project (November 2022 - January 2024)", description: `Served as Product Owner and Scrum Master for a regulatory compliance client (Drata), **ensuring the delivery of 10+ releases with 95-98% quality**. Managed the training process for **20+ collaborators**, and managed all Scrum/Kanban ceremonies, **increasing sprint predictability by 20-30%**.` },
                         { title: "Nordhen Project", description: `Collaborated on the development of a complex system with 4 modules, managing and coordinating a Scrum team. **Achieved 90-95% compliance with key goals** and **resolved 20-30+ critical incidents**, utilizing tools like Jira, Confluence, and Slack for efficient collaboration.` }
@@ -584,7 +591,7 @@ const content = {
                 { title: 'Management 3.0', issuer: 'Management 3.0', year: '2022' },
                 { title: 'Scrum Product Owner Professional Certificate (SPOPC)', issuer: 'CertiProf', year: '2022' },
                 { title: 'Kanban Essentials Professional Certificated (KEPC)', issuer: 'CertiProf', year: '2022' },
-                { title: 'Financial Statement Reading Fundamentals', issuer: 'Instrucción Ágil', year: '2021' },
+                { title: 'Financial Statement Reading Fundamentals for Non-Financial Professionals', issuer: 'Instrucción Ágil', year: '2021' },
                 { title: 'Remote Work & Virtual Collaboration Professional Certificated (RWVCPC)', issuer: 'CertiProf', year: '2021' },
                 { title: 'SCRUM MASTER SMC', issuer: 'CertiProf', year: '2021' },
                 { title: 'Project Management Course based on PMI 5th edition', issuer: 'UDEMY', year: '2021' },
@@ -814,14 +821,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 link.classList.remove('bg-sky-100', 'text-sky-800', 'font-bold');
             }
         });
-        // Scroll to the top of the target section
-        document.querySelector(hash).scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         // Hide mobile menu after navigation on mobile screens
         if (!sidebarNav.classList.contains('hidden') && window.innerWidth < 768) {
             sidebarNav.classList.add('hidden');
             sidebarRoleElement.classList.add('hidden'); // Also hide the role when menu closes
         }
+
+        // Scroll to the top of the window, ensuring visibility of the newly active section.
+        // Add a small delay to ensure rendering is complete before scrolling.
+        setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 100); // Short delay
     }
 
     // Add event listeners for navigation links
