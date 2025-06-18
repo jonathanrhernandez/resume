@@ -60,10 +60,15 @@
             }
             .section {
                 display: block !important; /* Show all sections for print */
-                page-break-after: always;
+                page-break-before: always; /* Force new page before each section */
+                margin-top: 2cm !important; /* Add space between printed pages */
+                padding-bottom: 1cm !important; /* Add padding at bottom of section for print */
+                page-break-after: auto; /* Allow content to flow naturally within section */
+                page-break-inside: avoid; /* Prevent content from breaking awkwardly across pages */
             }
-            .section:last-child {
-                page-break-after: auto;
+            .section:first-child {
+                 page-break-before: auto !important; /* No page break before the very first section */
+                 margin-top: 0 !important;
             }
             .bg-white, .bg-slate-50 {
                 background-color: #fff !important;
@@ -80,6 +85,7 @@
             .chart-container {
                 height: auto !important;
                 max-height: none !important;
+                margin-bottom: 20px; /* Add some margin below chart for print */
             }
             canvas {
                 width: 100% !important;
@@ -106,6 +112,7 @@
         <aside class="w-full md:w-64 bg-white md:border-r border-b md:border-b-0 border-slate-200 sticky top-0 md:h-screen z-20">
             <div class="flex justify-between items-center p-4 md:p-6 border-b md:border-b-0 border-slate-200">
                 <h1 class="text-xl font-bold text-sky-700">Jonathan Hernández</h1>
+                <!-- Role title always visible on desktop, hidden on mobile to save space -->
                 <p class="text-sm text-slate-500 mt-1 hidden md:block" id="sidebar-role"></p>
                 <button id="mobile-menu-button" class="md:hidden p-2 rounded-lg text-slate-700 hover:bg-sky-100">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -142,10 +149,11 @@
             <section id="profile" class="section">
                 <div class="bg-white p-8 rounded-2xl shadow-sm">
                     <div class="flex flex-col md:flex-row items-center">
+                        <!-- Image path updated to Foto 2.png as per user's request, assuming it's in the repo root -->
                         <img src="Foto 2.png" alt="Foto de Perfil de Jonathan Hernández" class="w-40 h-40 rounded-full object-cover border-4 border-sky-100 shadow-md mb-6 md:mb-0 md:mr-8">
                         <div class="text-center md:text-left">
                             <h2 class="text-4xl font-extrabold text-slate-800" id="profile-name"></h2>
-                            <p class="mt-2 text-xl font-medium text-sky-600" id="profile-roles"></p>
+                            <p class="mt-2 text-xl font-medium text-sky-600" id="profile-roles-main"></p> <!-- Changed ID to avoid conflict -->
                             <div class="mt-4 flex justify-center md:justify-start space-x-4 text-slate-500">
                                 <a href="https://www.linkedin.com/in/jonathanrhernandez/" target="_blank" class="hover:text-sky-600 transition-colors">LinkedIn</a>
                                 <span>&bull;</span>
@@ -189,12 +197,13 @@
                 
                 <div class="bg-white p-8 rounded-2xl shadow-sm">
                     <h3 class="text-2xl font-bold text-slate-800 mb-4" id="tools-tech-title"></h3>
-                    <div class="mb-6 text-center" id="skills-filter-buttons">
-                        <button class="skill-filter-btn active-filter" data-filter="all"></button>
-                        <button class="skill-filter-btn" data-filter="agile"></button>
-                        <button class="skill-filter-btn" data-filter="dev"></button>
-                        <button class="skill-filter-btn" data-filter="db"></button>
-                        <button class="skill-filter-btn" data-filter="ia"></button>
+                    <div class="mb-6 text-center space-x-2 sm:space-x-4" id="skills-filter-buttons">
+                        <!-- Buttons will have dynamic text loaded by JS -->
+                        <button class="skill-filter-btn active-filter px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-sky-600 text-white hover:bg-sky-700" data-filter="all"></button>
+                        <button class="skill-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-slate-200 text-slate-700 hover:bg-sky-50 hover:text-sky-700" data-filter="agile"></button>
+                        <button class="skill-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-slate-200 text-slate-700 hover:bg-sky-50 hover:text-sky-700" data-filter="dev"></button>
+                        <button class="skill-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-slate-200 text-slate-700 hover:bg-sky-50 hover:text-sky-700" data-filter="db"></button>
+                        <button class="skill-filter-btn px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-slate-200 text-slate-700 hover:bg-sky-50 hover:text-sky-700" data-filter="ia"></button>
                     </div>
                     <div id="skills-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                         <!-- Skills will be injected here by JS -->
@@ -353,9 +362,9 @@ const content = {
                     projects: [
                         { title: "AI-Powered Facial Access Control Project (June 2025 - Present)", description: `Contributed to all phases of the development cycle (design, development, testing) of an **office access control system with facial identification**, leveraging Artificial Intelligence tools to optimize the process, achieving **development acceleration of 35-50%** and **process efficiency improvement of 30-45%**. Actively utilized platforms such as **bolt.new, V0, Gemini, ChatGPT, and Cursor** for design and development. Developed the front-end with **React** and the back-end with **Supabase Edge Functions**, using **Supabase** as the database, ensuring a modern and scalable architecture. Collaborated in an autonomous team where the implementation of AI tools has **optimized feature delivery** and **fostered a continuous innovation environment**.` },
                         { title: "Norden Delivery KPIs Project (April 2025 - June 2025)", description: `Designed and developed a **KPI Module** connected to Jira, GitHub, and Bitbucket via their APIs to obtain key metrics. Created a **Financial Dashboard** visualizing client payments versus employee salaries, **facilitating strategic and financial decision-making by 15-25%**. **Improved visibility of critical metrics by 70-80%**, enabling more agile, data-driven decisions that positively impacted profitability.` },
-                        { title: "Mosaic Project (March 2024 - April 2025)", description: `Led key projects to enhance the strategic finance platform, focusing on financial data integration and management, resulting in a **15-25% improvement in data processing efficiency** and a **10-20% reduction in manual errors**. Implemented **Export to Google Sheets** functionality, optimizing reports for **50-100 users/teams**. Developed a **Google Sheets Add-on** to directly connect metrics and reports, **reducing report preparation time by 20-30%**. Delivered **ETL Connectors** (BigQuery, Redshift, Xero, Snowflake, Sage Intacct) for efficient data transformation and loading, **improving data quality by 15-25%** and **expediting access to critical information**. Responsible for defining and prioritizing requirements, coordinating technical teams and validations, and ensuring high-quality deliverables aligned with client needs.` },
-                        { title: "WellFit Project", description: `Led the front-end development of an innovative system for dental clinics, ensuring efficient integration with the backend via APIs. Managed functional requirement definition and prioritization, ensuring intuitive interfaces that **improved operational efficiency by 20-30%**. Coordinated the implementation of visual and functional components for managing users, administrative roles, and clinical records, **reducing patient record management time by 15-25%**. Ensured payment module integration, including banking credit systems, **processing over 500+ transactions monthly**. Served as a key facilitator in cross-functional communication between designers, developers, and stakeholders, **acelerating the delivery cycle by 10-15%**.` },
-                        { title: "Wellness Project", description: `Led the development of an innovative web application to improve user health through voice interaction, OCR-based clinical document analysis, and AI-powered personalized meal plans. Developed clear functional and non-functional requirements, **increasing backlog clarity by 20-30%**. Designed development strategies and coordinated incremental deliveries, **reducing new feature launch time by 15-25%**. Oversaw voice recognition and OCR technology integration, ensuring **optimal performance in extracting and analyzing thousands of clinical data points**. Managed Agile ceremonies, **improving team efficiency by 10-20%**. Validated key functionalities like personalized meal plan generation, contributing to **improving dietary habits for hundreds of users**.` },
+                        { title: "Mosaic Project (March 2024 - April 2025)", description: `Led key projects to enhance the strategic finance platform, focusing on financial data integration and management, resulting in a **15-25% improvement in data processing efficiency** and a **10-20% reduction in manual errors**. Implemented **Export to Google Sheets** functionality, optimizing reports for **50-100 users/teams**. Developed a **Google Sheets Add-on** to directly connect metrics and reports, **reducing the time of report preparation by 20-30%**. Delivered **ETL Connectors** (BigQuery, Redshift, Xero, Snowflake, Sage Intacct) for efficient data transformation and loading, **improving data quality by 15-25%** and **expediting access to critical information**. Responsible for defining and prioritizing requirements, coordinating technical teams and validations, and ensuring high-quality deliverables aligned with client needs.` },
+                        { title: "WellFit Project", description: `Led the front-end development of an innovative system for dental clinics, ensuring efficient integration with the backend via APIs. Managed functional requirement definition and prioritization, ensuring intuitive interfaces that **improved operational efficiency by 20-30%**. Coordinated the implementation of visual and functional components for managing users, administrative roles, and clinical records, **reducing the time of record management by 15-25%**. Ensured payment module integration, including banking credit systems, **processing over 500+ transactions monthly**. Served as a key facilitator in cross-functional communication between designers, developers, and stakeholders, **accelerating the delivery cycle by 10-15%**.` },
+                        { title: "Wellness Project", description: `Led the development of an innovative web application to improve user health through voice interaction, OCR-based clinical document analysis, and AI-powered personalized meal plans. Developed clear functional and non-functional requirements, **increasing backlog clarity by 20-30%**. Designed development strategies and coordinated incremental deliveries, **reducing the time to launch new features by 15-25%**. Oversaw voice recognition and OCR technology integration, ensuring **optimal performance in extracting and analyzing thousands of clinical data points**. Managed Agile ceremonies, **improving team efficiency by 10-20%**. Validated key functionalities like personalized meal plan generation, contributing to **improving dietary habits for hundreds of users**.` },
                         { title: "OCR Project for INE Data Extraction", description: `Participated as Product Owner in an OCR project to extract information from users' voter ID cards (INE) via photos or direct image uploads. Designed and oversaw work cycles, **ensuring high-quality deliverables within established timelines**. Created functional and non-functional specifications in INVEST format, **improving project scope understanding by 20-30%**. Managed the backlog, **optimizing workflow for the engineering team and 5-7 team members**. Oversaw data extraction testing, **improving accuracy in critical information capture by 95-99%**. Achieved an automated workflow that **optimized data capture and reduced identity validation time by 40-60%**.` },
                         { title: "Drata Project (November 2022 - January 2024)", description: `Served as Product Owner and Scrum Master for a regulatory compliance client (Drata), **ensuring the delivery of 10+ releases with 95-98% quality**. Managed the training process for **20+ collaborators**, and managed all Scrum/Kanban ceremonies, **increasing sprint predictability by 20-30%**.` },
                         { title: "Nordhen Project", description: `Collaborated on the development of a complex system with 4 modules, managing and coordinating a Scrum team. **Achieved 90-95% compliance with key goals** and **resolved 20-30+ critical incidents**, utilizing tools like Jira, Confluence, and Slack for efficient collaboration.` }
@@ -378,7 +387,7 @@ const content = {
                     ]
                 },
                 {
-                    name: "Catarsyslab / Solertia Group",
+                    name: "Catarsyslab / Grupo Solertia",
                     role: ".Net Developer / Front-end",
                     time: "August 2013 - August 2015",
                     projects: [
@@ -436,7 +445,7 @@ const content = {
                 { title: 'DevOps Fundamentals', issuer: 'PeopleCert', year: '2023' },
                 { title: 'Management 3.0', issuer: 'Management 3.0', year: '2022' },
                 { title: 'Scrum Product Owner Professional Certificate (SPOPC)', issuer: 'CertiProf', year: '2022' },
-                { title: 'Kanban Essentials Professional Certificado (KEPC)', issuer: 'CertiProf', year: '2022' },
+                { title: 'Kanban Essentials Professional Certificated (KEPC)', issuer: 'CertiProf', year: '2022' },
                 { title: 'Financial Statement Reading Fundamentals', issuer: 'Instrucción Ágil', year: '2021' },
                 { title: 'Remote Work & Virtual Collaboration Professional Certificated (RWVCPC)', issuer: 'CertiProf', year: '2021' },
                 { title: 'SCRUM MASTER SMC', issuer: 'CertiProf', year: '2021' },
@@ -464,7 +473,7 @@ function updateContent(lang) {
     // Update Profile Section
     document.getElementById('sidebar-role').textContent = data.profile.roles;
     document.getElementById('profile-name').textContent = "Jonathan Rubén Hernández González"; // Name remains constant
-    document.getElementById('profile-roles').textContent = data.profile.roles;
+    document.getElementById('profile-roles-main').textContent = data.profile.roles; // Use the new ID for the main profile section
     document.getElementById('profile-location').textContent = data.profile.location;
     document.getElementById('profile-language').textContent = data.profile.language;
     document.getElementById('profile-summary-title').textContent = data.profile.summaryTitle;
@@ -511,7 +520,7 @@ function updateContent(lang) {
     document.getElementById('key-competencies-title').textContent = data.skills.keyCompetenciesTitle;
     document.getElementById('tools-tech-title').textContent = data.skills.toolsTechTitle;
 
-    // Update skill filter buttons
+    // Update skill filter buttons' text content
     document.querySelector('#skills-filter-buttons button[data-filter="all"]').textContent = data.skills.filters.all;
     document.querySelector('#skills-filter-buttons button[data-filter="agile"]').textContent = data.skills.filters.agile;
     document.querySelector('#skills-filter-buttons button[data-filter="dev"]').textContent = data.skills.filters.dev;
@@ -696,12 +705,17 @@ document.addEventListener('DOMContentLoaded', function () {
     navigateTo(initialHash); // Then navigate to the correct section
 
     // Skills filter logic (re-attached after content update)
+    // The previous skill filter buttons had hardcoded text. Now they are just buttons and their textContent will be updated by updateContent().
+    // The filter logic still works by dataset.filter.
     const skillsFilterButtons = document.querySelectorAll('.skill-filter-btn');
     skillsFilterButtons.forEach(button => {
         button.addEventListener('click', () => {
             const filter = button.dataset.filter;
-            skillsFilterButtons.forEach(btn => btn.classList.remove('active-filter'));
-            button.classList.add('active-filter');
+            skillsFilterButtons.forEach(btn => btn.classList.remove('active-filter', 'bg-sky-600', 'text-white'));
+            skillsFilterButtons.forEach(btn => btn.classList.add('bg-slate-200', 'text-slate-700', 'hover:bg-sky-50', 'hover:text-sky-700'));
+            button.classList.add('active-filter', 'bg-sky-600', 'text-white');
+            button.classList.remove('bg-slate-200', 'text-slate-700', 'hover:bg-sky-50', 'hover:text-sky-700');
+
 
             const skillCards = document.querySelectorAll('#skills-grid .skill-card');
             skillCards.forEach(card => {
@@ -716,12 +730,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Handle sidebar visibility on resize for desktop/mobile transition
     const handleResize = () => {
+        const sidebarRoleElement = document.getElementById('sidebar-role');
         if (window.innerWidth >= 768) { // md breakpoint in Tailwind
             sidebarNav.classList.remove('hidden');
-            document.getElementById('sidebar-role').classList.remove('hidden');
+            sidebarRoleElement.classList.remove('hidden'); // Ensure it's shown on desktop
         } else {
-            sidebarNav.classList.add('hidden');
-            document.getElementById('sidebar-role').classList.add('hidden');
+            sidebarNav.classList.add('hidden'); // Hide nav on mobile by default
+            sidebarRoleElement.classList.add('hidden'); // Hide role title on mobile
         }
     };
 
