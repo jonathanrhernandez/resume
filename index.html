@@ -56,13 +56,18 @@
             main {
                 margin-left: 0 !important;
                 width: 100% !important;
-                padding: 0 !important;
+                /* Adjust padding for print to give more space */
+                padding-top: 1cm !important;
+                padding-bottom: 1cm !important;
+                padding-left: 0.5cm !important;
+                padding-right: 0.5cm !important;
             }
             .section {
                 display: block !important; /* Show all sections for print */
                 page-break-before: always; /* Force new page before each section */
-                margin-top: 2cm !important; /* Add space between printed pages */
-                padding-bottom: 1cm !important; /* Add padding at bottom of section for print */
+                /* Add more margin for clear separation between sections in print */
+                margin-top: 1.5cm !important; 
+                margin-bottom: 1.5cm !important; 
                 page-break-after: auto; /* Allow content to flow naturally within section */
                 page-break-inside: avoid; /* Prevent content from breaking awkwardly across pages */
             }
@@ -101,6 +106,21 @@
             .timeline-item::before {
                 background-color: #000 !important;
                 border-color: #fff !important;
+            }
+            /* Show URLs for print */
+            .print-only {
+                display: inline !important;
+            }
+            .profile-links a {
+                display: block; /* Make each link take full width */
+                margin-bottom: 5px; /* Space between links */
+            }
+        }
+
+        /* Hide print-only elements on screen */
+        @media screen {
+            .print-only {
+                display: none !important;
             }
         }
     </style>
@@ -159,12 +179,12 @@
                             <h2 class="text-4xl font-extrabold text-slate-800" id="profile-name">Jonathan Rubén Hernández González</h2>
                             <!-- Updated to include Product Manager in the main profile roles -->
                             <p class="mt-2 text-xl font-medium text-sky-600" id="profile-roles-main"></p>
-                            <div class="mt-4 flex justify-center md:justify-start space-x-4 text-slate-500">
-                                <a href="https://www.linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57/" target="_blank" class="hover:text-sky-600 transition-colors">LinkedIn</a>
+                            <div class="mt-4 flex justify-center md:justify-start space-x-4 text-slate-500 profile-links">
+                                <a href="https://www.linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57/" target="_blank" class="hover:text-sky-600 transition-colors">LinkedIn<span class="print-only text-xs text-slate-500 ml-1">(linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57)</span></a>
                                 <span>&bull;</span>
-                                <a href="https://github.com/jonathanrhernandez" target="_blank" class="hover:text-sky-600 transition-colors">GitHub</a>
+                                <a href="https://github.com/jonathanrhernandez" target="_blank" class="hover:text-sky-600 transition-colors">GitHub<span class="print-only text-xs text-slate-500 ml-1">(github.com/jonathanrhernandez)</span></a>
                                 <span>&bull;</span>
-                                <a href="mailto:hernandezgonzalezjonathanruben@gmail.com" class="hover:text-sky-600 transition-colors">Email</a>
+                                <a href="mailto:hernandezgonzalezjonathanruben@gmail.com" class="hover:text-sky-600 transition-colors">Email<span class="print-only text-xs text-slate-500 ml-1">(hernandezgonzalezjonathanruben@gmail.com)</span></a>
                             </div>
                              <p class="mt-1 text-sm text-slate-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block -mt-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
