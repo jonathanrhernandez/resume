@@ -149,15 +149,25 @@
             h2, h3 {
                 page-break-after: avoid !important; /* Prevents title from being orphaned at bottom of page */
             }
+            .timeline-item h3 { /* Specific for project titles in timeline */
+                page-break-before: avoid !important; /* Ensures title moves with its content */
+            }
             p {
                 margin-bottom: 0.5em !important; /* Reduce space between paragraphs */
             }
-            /* Explicitly hide key-competencies-title in print */
-            #key-competencies-title {
-                display: none !important; /* Hide key competencies title in print */
+            /* Explicitly hide key-competencies-title and skills-title, skills-subtitle in print */
+            #key-competencies-title, #skills-title, #skills-subtitle {
+                display: none !important; /* Hide these titles in print */
             }
             #tools-tech-title {
                 display: block !important; /* Ensure tools tech title is visible in print */
+            }
+            /* Reduce space between certification items */
+            #certs-grid > div {
+                margin-bottom: 0.25em !important; /* Reduced space between cert items */
+            }
+            #certs-grid > div:last-child {
+                margin-bottom: 0 !important;
             }
         }
 
@@ -491,7 +501,7 @@ const content = {
                         { title: "AI-Powered Facial Access Control Project (June 2025 - Present)", description: `Contributed to all phases of the development cycle (design, development, testing) of an **office access control system with facial identification**, leveraging Artificial Intelligence tools to optimize the process, achieving **development acceleration of 35-50%** and **process efficiency improvement of 30-45%**. Actively utilized platforms such as **bolt.new, V0, Gemini, ChatGPT, and Cursor** for design and development. Developed the front-end with **React** and the back-end with **Supabase Edge Functions**, using **Supabase** as the database, ensuring a modern and scalable architecture. Collaborated in an autonomous team where the implementation of AI tools has **optimized feature delivery** and **fostered a continuous innovation environment**.` },
                         { title: "Norden Delivery KPIs Project (April 2025 - June 2025)", description: `Designed and developed a **KPI Module** connected to Jira, GitHub, and Bitbucket via their APIs to obtain key metrics. Created a **Financial Dashboard** visualizing client payments versus employee salaries, **facilitating strategic and financial decision-making by 15-25%**. **Improved visibility of critical metrics by 70-80%**, enabling more agile, data-driven decisions that positively impacted profitability.` },
                         { title: "Mosaic Project (March 2024 - April 2025)", description: `Led key projects to enhance the strategic finance platform, focusing on financial data integration and management, resulting in a **15-25% improvement in data processing efficiency** and a **10-20% reduction in manual errors**. Implemented **Export to Google Sheets** functionality, optimizing reports for **50-100 users/teams**. Developed a **Google Sheets Add-on** to directly connect metrics and reports, **reducing the time of report preparation by 20-30%**. Delivered **ETL Connectors** (BigQuery, Redshift, Xero, Snowflake, Sage Intacct) for efficient data transformation and loading, **improving data quality by 15-25%** and **expediting access to critical information**. Responsible for defining and prioritizing requirements, coordinating technical teams and validations, and ensuring high-quality deliverables aligned with client needs.` },
-                        { title: "WellFit Project", description: `Led the front-end development of an innovative system for dental clinics, ensuring efficient integration with the backend via APIs. Managed functional requirement definition and prioritization, ensuring intuitive interfaces that **improved operational efficiency by 20-30%**. Coordinated the implementation of components visual and functional for managing users, administrative roles, and clinical records, **reducing the time of record management by 15-25%**. Ensured payment module integration, including banking credit systems, **processing over 500+ transactions monthly**. Served as a key facilitator in cross-functional communication between designers, developers, and stakeholders, **acelerating el ciclo de entrega en un 10-15%**.` },
+                        { title: "WellFit Project", description: `Led the front-end development of an innovative system for dental clinics, ensuring efficient integration with the backend via APIs. Managed functional requirement definition and prioritization, ensuring intuitive interfaces that **improved operational efficiency by 20-30%**. Coordiné la implementación de componentes visuales y funcionales para la gestión de usuarios, roles administrativos y expedientes clínicos, **reduciendo el tiempo de gestión de expedientes en un 15-25%**. Garantí la integración de módulos de pago, incluyendo sistemas de crédito bancario, **procesando más de 500+ transacciones mensuales**. Fungí como facilitador clave en la comunicación cross-funcional entre diseñadores, desarrolladores y stakeholders, **acelerando el ciclo de entrega en un 10-15%**.` },
                         { title: "Wellness Project", description: `Led the development of an innovative web application to improve user health through voice interaction, OCR-based clinical document analysis, and AI-powered personalized meal plans. Developed clear functional and non-functional requirements, **increasing backlog clarity by 20-30%**. Designed development strategies and coordinated incremental deliveries, **reducing the time to launch new features by 15-25%**. Oversaw voice recognition and OCR technology integration, ensuring **optimal performance in extracting and analyzing thousands of clinical data points**. Managed Agile ceremonies, **improving team efficiency by 10-20%**. Validated key functionalities like personalized meal plan generation, contributing to **improving dietary habits for hundreds of users**.` },
                         { title: "OCR Project for INE Data Extraction", description: `Participated as Product Owner in an OCR project to extract information from users' voter ID cards (INE) via photos or direct image uploads. Designed and oversaw work cycles, **ensuring high-quality deliverables within established timelines**. Created functional and non-functional specifications in INVEST format, **improving project scope understanding by 20-30%**. Administrated the backlog, **optimizing workflow for the engineering team and 5-7 team members**. Oversaw data extraction testing, **improving accuracy in critical information capture by 95-99%**. Achieved an automated workflow that **optimized data capture and reduced identity validation time by 40-60%**.` },
                         { title: "Drata Project (November 2022 - January 2024)", description: `Served as Product Owner and Scrum Master for a regulatory compliance client (Drata), **ensuring the delivery of 10+ releases with 95-98% quality**. Managed the training process for **20+ collaborators**, and managed all Scrum/Kanban ceremonies, **increasing sprint predictability by 20-30%**.` },
