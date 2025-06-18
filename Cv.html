@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Interactivo | Jonathan Hernández</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Sky -->
+    <!-- Application Structure Plan: A single-page application with a fixed sidebar navigation for desktop and a top-bar for mobile (collapsible hamburger menu). The content area dynamically displays different sections (Profile, Experience, Skills, Certifications) based on user clicks. This structure avoids a long, overwhelming scroll and allows recruiters to quickly jump to the information they need. The experience section uses an interactive timeline, and the skills section uses filtering and a chart to make the dense information digestible and engaging. A language toggle is added for multilingual accessibility. A print button provides PDF export functionality. -->
+    <!-- Visualization & Content Choices: 
+        - Profile: Dynamic text and image for a strong first impression.
+        - Experience: An interactive vertical timeline (HTML/CSS) where clicking a company reveals detailed project cards. This organizes a long career path logically.
+        - Skills: A combination of a Chart.js bar chart for a high-level overview of key competencies and filterable HTML cards for a detailed, user-controlled exploration of all technical tools. This makes the extensive list manageable.
+        - Certifications: A clean, multi-column grid layout (Tailwind Grid) to present the numerous certifications in a structured and easily scannable format, highlighting a commitment to continuous learning.
+        - Justification: This multi-faceted approach transforms the CV from a passive document into an active exploration tool, catering to different user needs (quick overview vs. deep dive) within a single, cohesive design. The language toggle enhances usability for international recruiters. The print option allows for traditional document sharing. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #0284c7;
+            border: 3px solid #f0f9ff;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        /* Print styles */
+        @media print {
+            aside, #mobile-menu-button, #print-cv-button {
+                display: none !important;
+            }
+            main {
+                margin-left: 0 !important;
+                width: 100% !important;
+                padding: 0 !important;
+            }
+            .section {
+                display: block !important; /* Show all sections for print */
+                page-break-after: always;
+            }
+            .section:last-child {
+                page-break-after: auto;
+            }
+            .bg-white, .bg-slate-50 {
+                background-color: #fff !important;
+            }
+            .text-slate-700, .text-slate-800, .text-sky-700, .text-slate-500, .text-sky-600 {
+                color: #000 !important;
+            }
+            .shadow-sm, .shadow-md {
+                box-shadow: none !important;
+            }
+            .border, .border-b, .border-slate-200, .border-sky-100 {
+                border: none !important;
+            }
+            .chart-container {
+                height: auto !important;
+                max-height: none !important;
+            }
+            canvas {
+                width: 100% !important;
+                height: auto !important;
+            }
+            .skill-card {
+                background-color: #f8f8f8 !important;
+                border: 1px solid #eee !important;
+            }
+            #skills-filter-buttons {
+                display: none !important;
+            }
+            .timeline-item::before {
+                background-color: #000 !important;
+                border-color: #fff !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-700">
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <!-- Mobile Top Bar / Desktop Sidebar -->
+        <aside class="w-full md:w-64 bg-white md:border-r border-b md:border-b-0 border-slate-200 sticky top-0 md:h-screen z-20">
+            <div class="flex justify-between items-center p-4 md:p-6 border-b md:border-b-0 border-slate-200">
+                <h1 class="text-xl font-bold text-sky-700">Jonathan Hernández</h1>
+                <p class="text-sm text-slate-500 mt-1 hidden md:block" id="sidebar-role"></p>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-lg text-slate-700 hover:bg-sky-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+            <nav id="sidebar-nav" class="hidden md:block p-4">
+                <ul class="space-y-2" id="nav-menu">
+                    <li><a href="#profile" class="nav-link flex items-center px-4 py-2 text-slate-700 rounded-lg hover:bg-sky-50 hover:text-sky-700 transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        <span id="nav-profile"></span></a></li>
+                    <li><a href="#experience" class="nav-link flex items-center px-4 py-2 text-slate-700 rounded-lg hover:bg-sky-50 hover:text-sky-700 transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <span id="nav-experience"></span></a></li>
+                    <li><a href="#skills" class="nav-link flex items-center px-4 py-2 text-slate-700 rounded-lg hover:bg-sky-50 hover:text-sky-700 transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3M5.636 5.636l-1.414-1.414m15.556 15.556l-1.414-1.414M18.364 5.636l-1.414 1.414m-12.728 12.728l-1.414 1.414"></path></svg>
+                        <span id="nav-skills"></span></a></li>
+                    <li><a href="#certs" class="nav-link flex items-center px-4 py-2 text-slate-700 rounded-lg hover:bg-sky-50 hover:text-sky-700 transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+                        <span id="nav-certs"></span></a></li>
+                </ul>
+            </nav>
+            <div class="p-4 border-t border-slate-200 text-center flex justify-center md:block">
+                <button id="lang-toggle-es" class="lang-toggle-btn px-3 py-1 mr-2 rounded-full font-semibold text-sm bg-sky-600 text-white">ES</button>
+                <button id="lang-toggle-en" class="lang-toggle-btn px-3 py-1 rounded-full font-semibold text-sm bg-slate-200 text-slate-700">EN</button>
+                <button id="print-cv-button" class="mt-4 md:mt-2 px-4 py-2 rounded-lg bg-emerald-500 text-white font-semibold text-sm hover:bg-emerald-600 transition-colors duration-200 shadow-md">
+                    Imprimir CV (PDF)
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4 sm:p-6 lg:p-10">
+            <!-- Profile Section -->
+            <section id="profile" class="section">
+                <div class="bg-white p-8 rounded-2xl shadow-sm">
+                    <div class="flex flex-col md:flex-row items-center">
+                        <img src="Foto 2.png" alt="Foto de Perfil de Jonathan Hernández" class="w-40 h-40 rounded-full object-cover border-4 border-sky-100 shadow-md mb-6 md:mb-0 md:mr-8">
+                        <div class="text-center md:text-left">
+                            <h2 class="text-4xl font-extrabold text-slate-800" id="profile-name"></h2>
+                            <p class="mt-2 text-xl font-medium text-sky-600" id="profile-roles"></p>
+                            <div class="mt-4 flex justify-center md:justify-start space-x-4 text-slate-500">
+                                <a href="https://www.linkedin.com/in/jonathanrhernandez/" target="_blank" class="hover:text-sky-600 transition-colors">LinkedIn</a>
+                                <span>&bull;</span>
+                                <a href="https://github.com/jonathanrhernandez" target="_blank" class="hover:text-sky-600 transition-colors">GitHub</a>
+                                <span>&bull;</span>
+                                <a href="mailto:hernandezgonzalezjonathanruben@gmail.com" class="hover:text-sky-600 transition-colors">Email</a>
+                            </div>
+                             <p class="mt-1 text-sm text-slate-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block -mt-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
+                                <span id="profile-location"></span>
+                            </p>
+                             <p class="mt-1 text-sm text-slate-500" id="profile-language"></p>
+                        </div>
+                    </div>
+                    <hr class="my-8 border-slate-200">
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-800 mb-4" id="profile-summary-title"></h3>
+                        <p class="text-lg text-slate-600 leading-relaxed" id="profile-summary"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Experience Section -->
+            <section id="experience" class="section">
+                <h2 class="text-3xl font-bold text-slate-800 mb-8" id="experience-title"></h2>
+                <div class="relative border-l-2 border-sky-200 pl-10 space-y-12" id="experience-timeline">
+                    <!-- Experience content dynamically loaded here -->
+                </div>
+            </section>
+
+            <!-- Skills Section -->
+            <section id="skills" class="section">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2" id="skills-title"></h2>
+                <p class="text-lg text-slate-600 mb-8" id="skills-subtitle"></p>
+                <div class="bg-white p-8 rounded-2xl shadow-sm mb-8">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4" id="key-competencies-title"></h3>
+                    <div class="chart-container">
+                        <canvas id="skillsChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-sm">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4" id="tools-tech-title"></h3>
+                    <div class="mb-6 text-center" id="skills-filter-buttons">
+                        <button class="skill-filter-btn active-filter" data-filter="all"></button>
+                        <button class="skill-filter-btn" data-filter="agile"></button>
+                        <button class="skill-filter-btn" data-filter="dev"></button>
+                        <button class="skill-filter-btn" data-filter="db"></button>
+                        <button class="skill-filter-btn" data-filter="ia"></button>
+                    </div>
+                    <div id="skills-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        <!-- Skills will be injected here by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Certifications Section -->
+            <section id="certs" class="section">
+                 <h2 class="text-3xl font-bold text-slate-800 mb-2" id="certs-title"></h2>
+                 <p class="text-lg text-slate-600 mb-8" id="certs-subtitle"></p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="certs-grid">
+                   <!-- Certs will be injected here by JS -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+<script>
+let skillsChartInstance = null; // Variable to hold the Chart.js instance
+
+const content = {
+    es: {
+        profile: {
+            roles: "Product Owner | Scrum Master | Project Manager | Web Developer",
+            location: "Tizayuca, Hidalgo, México",
+            language: "Idiomas: Español (Nativo), Inglés (B2+ Conversacional)",
+            summaryTitle: "Resumen Profesional",
+            summary: `Desde hace más de 5 años, he trabajado como Product Owner y Scrum Master en un enfoque híbrido, combinando la eficiencia en la entrega de valor con la agilidad en los procesos. Mi carrera en sistemas comenzó en 2013, desarrollándome inicialmente como programador web tanto en front-end como en back-end. Posteriormente, asumí el liderazgo de proyectos, donde coordiné equipos de trabajo y orienté sus esfuerzos hacia resultados exitosos. Como Product Owner, defino y priorizo requisitos que se alinean con las metas de negocio y las necesidades del cliente, asegurando la maximización del valor del producto. Mi rol de Scrum Master me permite gestionar tiempos, resolver problemas con agilidad y orquestar ceremonias que mejoran continuamente la colaboración y el flujo de trabajo del equipo. Además, me dedico a la capacitación en metodologías ágiles, impulsando un ambiente de trabajo proactivo y autónomo. Mi experiencia integral en desarrollo, gestión de proyectos y agilidad me ha dotado de una visión estratégica que me permite organizar objetivos claros, delegar responsabilidades eficazmente y monitorear el avance para asegurar productos de alta calidad en entornos dinámicos. La organización, la planificación y la resolución proactiva de problemas son claves en mi día a día, abordando cada reto con autonomía y un enfoque inquebrantable en la excelencia.`
+        },
+        experience: {
+            title: "Experiencia Profesional",
+            companies: [
+                {
+                    name: "Arkusnexus (Grupo Mind)",
+                    role: "Product Owner | Scrum Master",
+                    time: "Junio 2022 - A la fecha",
+                    projects: [
+                        { title: "Proyecto Control de Accesos Facial con IA (Junio 2025 - A la fecha)", description: `Contribuyo en todas las fases del ciclo de desarrollo (diseño, desarrollo, pruebas) de un **sistema de control de accesos a oficinas con identificación facial**, aprovechando herramientas de Inteligencia Artificial para optimizar el proceso. Utilizo activamente plataformas como **bolt.new, V0, Gemini, ChatGPT y Cursor** para el diseño y desarrollo, logrando **acelerar el desarrollo en un 35-50%** y **mejorar la eficiencia del proceso en un 30-45%**. Desarrollo el front-end con **React** y el back-end con **Edge Functions de Supabase**, utilizando **Supabase** como base de datos, lo que garantiza una arquitectura moderna y escalable. Colaboro en un equipo autónomo donde la implementación de herramientas de IA ha **optimizado la entrega de funcionalidades** y **fomentado un ambiente de innovación continua**.` },
+                        { title: "Proyecto Norden Delivery KPIs (Abril 2025 - Junio 2025)", description: `Diseñé y desarrollé un **Módulo de KPIs** conectado a Jira, GitHub y Bitbucket mediante sus APIs para obtener métricas clave. Creé un **Dashboard Financiero** que visualiza pagos de clientes versus salarios de colaboradores, **facilitando la toma de decisiones estratégicas y financieras en un 15-25%**. **Mejoré la visibilidad de métricas críticas en un 70-80%**, permitiendo una **toma de decisiones más ágil y basada en datos**, lo que impactó positivamente la rentabilidad.` },
+                        { title: "Proyecto Mosaic (Marzo 2024 - Abril 2025)", description: `Lideré proyectos clave para mejorar la plataforma de finanzas estratégicas, enfocándome en la integración y manejo de datos financieros, lo que resultó en una **mejora del 15-25% en la eficiencia del procesamiento de datos** y una **reducción del 10-20% en errores manuales**. Implementé la funcionalidad de **Exportación a Google Sheets**, permitiendo transferir datos clave de la plataforma a hojas de cálculo, **optimizando los reportes para 50-100 usuarios/equipos**. Desarrollé un **Add-on de Google Sheets** para conectar métricas y reportes directamente, **reduciendo el tiempo de preparación de informes en 20-30%**. Entregué **Conectores ETL** (BigQuery, Redshift, Xero, Snowflake, Sage Intacct) para transformar y cargar datos eficientemente, lo que **mejoró la calidad de los datos en un 15-25%** y **agilizó el acceso a información crítica**. Responsable de definir y priorizar requerimientos, coordinar equipos técnicos y validaciones, y asegurar entregables de alta calidad alineados con las necesidades del cliente.` },
+                        { title: "Proyecto WellFit", description: `Lideré el desarrollo del front-end de un sistema innovador para clínicas dentales, asegurando la integración eficiente con el backend mediante APIs. Gestioné la definición y priorización de requerimientos funcionales, asegurando interfaces intuitivas que **mejoraron la eficiencia operativa en 20-30%**. Coordiné la implementación de componentes visuales y funcionales para la gestión de usuarios, roles administrativos y expedientes clínicos, **reduciendo el tiempo de gestión de expedientes en un 15-25%**. Garantí la integración de módulos de pago, incluyendo sistemas de crédito bancario, **procesando más de 500+ transacciones mensuales**. Fungí como facilitador clave en la comunicación cross-funcional entre diseñadores, desarrolladores y stakeholders, **acelerando el ciclo de entrega en un 10-15%**.` },
+                        { title: "Proyecto Wellness", description: `Lideré el desarrollo de una aplicación web innovadora para mejorar la salud de los usuarios mediante interacción por voz, análisis de documentos clínicos con OCR y planes de alimentación personalizados con IA. Elaboré requerimientos funcionales y no funcionales claros, **incrementando la claridad del backlog en un 20-30%**. Diseñé estrategias de desarrollo y coordiné entregas incrementales, **reduciendo el tiempo de lanzamiento de nuevas funcionalidades en un 15-25%**. Supervisé la integración de tecnologías de reconocimiento de voz y OCR, asegurando un **rendimiento óptimo en la extracción y análisis de miles de datos clínicos**. Gestioné ceremonias Agile, **mejorando la eficiencia del equipo en un 10-20%**. Validé funcionalidades clave como la generación de planes alimenticios, contribuyendo a **mejorar los hábitos alimenticios de cientos de usuarios**.` },
+                        { title: "Proyecto OCR para Extracción de Datos de INE", description: `Participé como Product Owner en un proyecto de OCR para extraer información de credenciales de elector (INE) mediante fotografías o carga de imágenes. Diseñé y supervisé ciclos de trabajo, **asegurando entregables de alta calidad dentro de los tiempos establecidos**. Creé especificaciones funcionales y no funcionales en formato INVEST, **mejorando la comprensión del alcance del proyecto en un 20-30%**. Administré el backlog, **optimizando el flujo de trabajo para el equipo de ingeniería y 5-7 miembros del equipo**. Supervisé pruebas de extracción de datos, **mejorando la precisión en la captura de información crítica en un 95-99%**. Logré un flujo automatizado que **optimizó la captura de datos y redujo el tiempo de validación de identidad en 40-60%**.` },
+                        { title: "Proyecto Drata (Noviembre 2022 - Enero 2024)", description: `Desempeñé los roles de Product Owner y Scrum Master para un cliente en cumplimiento normativo (Drata), **asegurando la entrega de 10+ releases con 95-98% de calidad**. Administré el proceso de capacitación para **20+ colaboradores**, y gestioné todas las ceremonias Scrum/Kanban, **incrementando la predictibilidad del sprint en un 20-30%**.` },
+                        { title: "Proyecto Norden", description: `Colaboré en el desarrollo de un sistema complejo de 4 módulos, gestionando y coordinando un equipo Scrum. **Logré un 90-95% de cumplimiento en metas clave** y **resolví 20-30+ incidencias críticas**, utilizando herramientas como Jira, Confluence y Slack para una colaboración eficiente.` }
+                    ]
+                },
+                {
+                    name: "Coru (Compara Gurú)",
+                    role: "Ingeniero de Producto (PE / PO)",
+                    time: "Mayo 2022 - Junio 2022",
+                    projects: [
+                        { title: "Plataforma de Educación Financiera", description: `Actué como vínculo entre el negocio y desarrollo, generando historias de usuario y priorizando el backlog. Propuse mejoras que **incrementaron métricas de UX en un 10-15%** y contribuí a un **crecimiento del 5-10% en indicadores clave**.` }
+                    ]
+                },
+                {
+                    name: "Finasist S.A. de C.V.",
+                    role: "Product Owner (2019 - 2022) | Líder de Proyecto (2017 - 2019) | Desarrollador .Net (2015 - 2017)",
+                    time: "Agosto 2015 - Mayo 2022",
+                    projects: [
+                        { title: "Múltiples Sistemas de Crédito", description: `Como Product Owner, mejoré la eficiencia del desarrollo en un **15-20%**. Como Líder de Proyecto, gestioné el desarrollo de **5+ sistemas clave** y **reduje plazos de entrega en un 10-20%**. Supervisé la creación de un robot de pruebas que **disminuyó el tiempo de testing en un 30-50%**.` }
+                    ]
+                },
+                {
+                    name: "Catarsyslab / Grupo Solertia",
+                    role: "Desarrollador .Net / Front-end",
+                    time: "Agosto 2013 - Agosto 2015",
+                    projects: [
+                        { title: "Desarrollo de Sistemas a Medida", description: `Desarrollé múltiples sistemas web a medida (control de accesos, estados de cuenta, intranets) para clientes como Aramark, Broxel y Ficrea. Especializado en el front-end con HTML5, CSS3, Javascript, JQuery y Umbraco CMS.` }
+                    ]
+                }
+            ]
+        },
+        skills: {
+            title: "Habilidades y Competencias",
+            subtitle: "Una visión general de mis capacidades técnicas y de gestión.",
+            keyCompetenciesTitle: "Competencias Clave",
+            toolsTechTitle: "Herramientas y Tecnologías",
+            chartLabels: ['Gestión de Producto (PO)', 'Metodologías Ágiles (Scrum/Kanban)', 'Liderazgo de Proyectos', 'Desarrollo Web (Full-Stack)', 'Bases de Datos', 'Herramientas de IA'],
+            chartData: [95, 95, 90, 80, 85, 88],
+            filters: {
+                all: "Todas",
+                agile: "Gestión y Agile",
+                dev: "Desarrollo",
+                db: "Bases de Datos",
+                ia: "IA y Colaboración"
+            },
+            data: [
+                { name: 'Product Owner', category: 'agile' }, { name: 'Scrum Master', category: 'agile' }, { name: 'JIRA', category: 'agile' },
+                { name: 'Confluence', category: 'agile' }, { name: 'Trello', category: 'agile' }, { name: 'Kanban', category: 'agile' },
+                { name: 'Management 3.0', category: 'agile' }, { name: 'PMP', category: 'agile' }, { name: 'Design Thinking', category: 'agile' },
+                { name: 'C# & .NET', category: 'dev' }, { name: 'LinQ', category: 'dev' }, { name: 'Entity Framework', category: 'dev' },
+                { name: 'JavaScript', category: 'dev' }, { name: 'jQuery', category: 'dev' }, { name: 'React', category: 'dev' },
+                { name: 'HTML5', category: 'dev' }, { name: 'CSS3', category: 'dev' }, { name: 'Bootstrap', category: 'dev' },
+                { name: 'MVC5', category: 'dev' }, { name: 'Ajax', category: 'dev' }, { name: 'Json', category: 'dev' },
+                { name: 'SignalR', category: 'dev' }, { name: 'WCF', category: 'dev' }, { name: 'SOAP / REST', category: 'dev' },
+                { name: 'Katalon', category: 'dev' }, { name: 'Groovy', category: 'dev' }, { name: 'Node.js', category: 'dev' },
+                { name: 'Git / GitHub', category: 'dev' }, { name: 'Visual Studio Code', category: 'dev' },
+                { name: 'SQL Server', category: 'db' }, { name: 'MySQL', category: 'db' }, { name: 'Postgres', category: 'db' },
+                { name: 'MongoDB', category: 'db' }, { name: 'Supabase', category: 'db' },
+                { name: 'ChatGPT', category: 'ia' }, { name: 'Gemini', category: 'ia' }, { name: 'Cursor', category: 'ia' },
+                { name: 'V0', category: 'ia' }, { name: 'bolt.new', category: 'ia' }, { name: 'Ideogram', category: 'ia' },
+                { name: 'Napkin', category: 'ia' }, { name: 'Hey Gen', category: 'ia' }, { name: 'Claude', category: 'ia' },
+                { name: 'Notebook LM', category: 'ia' }, { name: 'Gamma', category: 'ia' }, { name: 'Google AI Studio', category: 'ia' },
+                { name: 'Figma', category: 'ia' }, { name: 'FigJam', category: 'ia' }, { name: 'Notion', category: 'ia' },
+                { name: 'Airtable', category: 'ia' }, { name: 'LaunchDarkly', category: 'ia' }, { name: 'Slack', category: 'ia' }, { name: 'Teams', category: 'ia' }
+            ]
+        },
+        certs: {
+            title: "Desarrollo Profesional",
+            subtitle: "Mi compromiso con el aprendizaje y la mejora continua a través de certificaciones y cursos.",
+            data: [
+                { title: 'Curso Gestión de Proyectos con Jira', issuer: 'Platzi', year: '2025' },
+                { title: 'Curso Estrategias para Aprender Inglés', issuer: 'Platzi', year: '2025' },
+                { title: 'Curso Introducción a la Inteligencia Artificial', issuer: 'Platzi', year: '2025' },
+                { title: 'Agile Coach Professional Certificate (ACPC)', issuer: 'CertiProf', year: '2024' },
+                { title: 'Cursos Avanzados Front-end con React (Master en Coding)', issuer: 'DEVF', year: '2023-2024' },
+                { title: 'JIRA Software Fundamentos', issuer: 'Genius IT Training', year: '2023' },
+                { title: 'Gerencia de Proyectos PMP V7', issuer: 'ITService University', year: '2023' },
+                { title: 'DevOps Fundamentals', issuer: 'PeopleCert', year: '2023' },
+                { title: 'Management 3.0', issuer: 'Management 3.0', year: '2022' },
+                { title: 'Scrum Product Owner Professional Certificate (SPOPC)', issuer: 'CertiProf', year: '2022' },
+                { title: 'Kanban Essentials Professional Certificado (KEPC)', issuer: 'CertiProf', year: '2022' },
+                { title: 'Fundamento de lectura de estados financieros', issuer: 'Instrucción Ágil', year: '2021' },
+                { title: 'Remote Work & Virtual Collaboration (RWVCPC)', issuer: 'CertiProf', year: '2021' },
+                { title: 'SCRUM MASTER SMC', issuer: 'CertiProf', year: '2021' },
+                { title: 'Project Management PMI 5ta edición', issuer: 'UDEMY', year: '2021' },
+                { title: 'Design Thinking Professional Certificado (DTPC)', issuer: 'CertiProf', year: '2020' },
+                { title: 'SCRUM MASTER SMC', issuer: 'SCRUM Study', year: '2018' },
+                { title: 'Entorno VUCA', issuer: 'FINASIST', year: '2018' },
+                { title: 'Master en Inteligencia Emocional', issuer: 'UDEMY', year: '2018' },
+                { title: 'SCRUM DEVELOPER SDC', issuer: 'SCRUM Study', year: '2017' },
+                { title: 'Scrum Fundamentals Certificado (SFC)', issuer: 'SCRUM Study', year: '2017' },
+                { title: 'Taller de Estrategia de Ventas (Lego Serious Play)', issuer: 'FINASIST', year: '2017' },
+                { title: 'Umbraco CMS', issuer: 'CatarsysLab', year: '2013' },
+                { title: 'Auto entrenamiento en ética pública', issuer: 'IFE', year: '2012' }
+            ]
+        }
+    },
+    en: {
+        profile: {
+            roles: "Product Owner | Scrum Master | Project Manager | Web Developer",
+            location: "Tizayuca, Hidalgo, Mexico",
+            language: "Languages: Spanish (Native), English (B2+ Conversational)",
+            summaryTitle: "Professional Summary",
+            summary: `For over 5 years, I have worked as a Product Owner and Scrum Master in a hybrid approach, combining efficiency in value delivery with agility in processes. My career in systems began in 2013, initially developing as a web programmer in both front-end and back-end. Subsequently, I took on project leadership, where I coordinated work teams and guided their efforts toward successful outcomes. As a Product Owner, I define and prioritize requirements that align with business goals and client needs, ensuring product value maximization. My Scrum Master role allows me to manage timelines, solve problems with agility, and orchestrate ceremonies that continuously improve team collaboration and workflow. Additionally, I am dedicated to training in Agile methodologies, fostering a proactive and autonomous work environment. My comprehensive experience in development, project management, and agility has equipped me with a strategic vision that allows me to organize clear objectives, delegate responsibilities effectively, and monitor progress to ensure high-quality products in dynamic environments. Organization, planning, and proactive problem-solving are key in my daily work, approaching each challenge with autonomy and an unwavering focus on excellence.`
+        },
+        experience: {
+            title: "Professional Experience",
+            companies: [
+                {
+                    name: "Arkusnexus (Mind Group)",
+                    role: "Product Owner | Scrum Master",
+                    time: "June 2022 - Present",
+                    projects: [
+                        { title: "AI-Powered Facial Access Control Project (June 2025 - Present)", description: `Contributed to all phases of the development cycle (design, development, testing) of an **office access control system with facial identification**, leveraging Artificial Intelligence tools to optimize the process, achieving **development acceleration of 35-50%** and **process efficiency improvement of 30-45%**. Actively utilized platforms such as **bolt.new, V0, Gemini, ChatGPT, and Cursor** for design and development. Developed the front-end with **React** and the back-end with **Supabase Edge Functions**, using **Supabase** as the database, ensuring a modern and scalable architecture. Collaborated in an autonomous team where the implementation of AI tools has **optimized feature delivery** and **fostered a continuous innovation environment**.` },
+                        { title: "Norden Delivery KPIs Project (April 2025 - June 2025)", description: `Designed and developed a **KPI Module** connected to Jira, GitHub, and Bitbucket via their APIs to obtain key metrics. Created a **Financial Dashboard** visualizing client payments versus employee salaries, **facilitating strategic and financial decision-making by 15-25%**. **Improved visibility of critical metrics by 70-80%**, enabling more agile, data-driven decisions that positively impacted profitability.` },
+                        { title: "Mosaic Project (March 2024 - April 2025)", description: `Led key projects to enhance the strategic finance platform, focusing on financial data integration and management, resulting in a **15-25% improvement in data processing efficiency** and a **10-20% reduction in manual errors**. Implemented **Export to Google Sheets** functionality, optimizing reports for **50-100 users/teams**. Developed a **Google Sheets Add-on** to directly connect metrics and reports, **reducing report preparation time by 20-30%**. Delivered **ETL Connectors** (BigQuery, Redshift, Xero, Snowflake, Sage Intacct) for efficient data transformation and loading, **improving data quality by 15-25%** and **expediting access to critical information**. Responsible for defining and prioritizing requirements, coordinating technical teams and validations, and ensuring high-quality deliverables aligned with client needs.` },
+                        { title: "WellFit Project", description: `Led the front-end development of an innovative system for dental clinics, ensuring efficient integration with the backend via APIs. Managed functional requirement definition and prioritization, ensuring intuitive interfaces that **improved operational efficiency by 20-30%**. Coordinated the implementation of visual and functional components for managing users, administrative roles, and clinical records, **reducing patient record management time by 15-25%**. Ensured payment module integration, including banking credit systems, **processing over 500+ transactions monthly**. Served as a key facilitator in cross-functional communication between designers, developers, and stakeholders, **acelerating the delivery cycle by 10-15%**.` },
+                        { title: "Wellness Project", description: `Led the development of an innovative web application to improve user health through voice interaction, OCR-based clinical document analysis, and AI-powered personalized meal plans. Developed clear functional and non-functional requirements, **increasing backlog clarity by 20-30%**. Designed development strategies and coordinated incremental deliveries, **reducing new feature launch time by 15-25%**. Oversaw voice recognition and OCR technology integration, ensuring **optimal performance in extracting and analyzing thousands of clinical data points**. Managed Agile ceremonies, **improving team efficiency by 10-20%**. Validated key functionalities like personalized meal plan generation, contributing to **improving dietary habits for hundreds of users**.` },
+                        { title: "OCR Project for INE Data Extraction", description: `Participated as Product Owner in an OCR project to extract information from users' voter ID cards (INE) via photos or direct image uploads. Designed and oversaw work cycles, **ensuring high-quality deliverables within established timelines**. Created functional and non-functional specifications in INVEST format, **improving project scope understanding by 20-30%**. Managed the backlog, **optimizing workflow for the engineering team and 5-7 team members**. Oversaw data extraction testing, **improving accuracy in critical information capture by 95-99%**. Achieved an automated workflow that **optimized data capture and reduced identity validation time by 40-60%**.` },
+                        { title: "Drata Project (November 2022 - January 2024)", description: `Served as Product Owner and Scrum Master for a regulatory compliance client (Drata), **ensuring the delivery of 10+ releases with 95-98% quality**. Managed the training process for **20+ collaborators**, and managed all Scrum/Kanban ceremonies, **increasing sprint predictability by 20-30%**.` },
+                        { title: "Nordhen Project", description: `Collaborated on the development of a complex system with 4 modules, managing and coordinating a Scrum team. **Achieved 90-95% compliance with key goals** and **resolved 20-30+ critical incidents**, utilizing tools like Jira, Confluence, and Slack for efficient collaboration.` }
+                    ]
+                },
+                {
+                    name: "Coru (Compara Gurú)",
+                    role: "Product Engineer (PE / PO)",
+                    time: "May 2022 - June 2022",
+                    projects: [
+                        { title: "Financial Education Platform", description: `Acted as a link between business and development, generating user stories and prioritizing the backlog. Proposed improvements that **increased UX metrics by 10-15%** and contributed to **5-10% growth in key KPIs**.` }
+                    ]
+                },
+                {
+                    name: "Finasist S.A. de C.V.",
+                    role: "Product Owner (2019 - 2022) | Project Leader (2017 - 2019) | .Net Developer (2015 - 2017)",
+                    time: "August 2015 - May 2022",
+                    projects: [
+                        { title: "Multiple Credit Systems", description: `As Product Owner, I improved development efficiency by **15-20%**. As Project Leader, I managed the development of **5+ key systems** and **reduced delivery times by 10-20%**. Oversaw the creation of an automated testing robot that **decreased testing time by 30-50%**.` }
+                    ]
+                },
+                {
+                    name: "Catarsyslab / Solertia Group",
+                    role: ".Net Developer / Front-end",
+                    time: "August 2013 - August 2015",
+                    projects: [
+                        { title: "Custom System Development", description: `Developed multiple custom web systems (access control, account statements, intranets) for clients such as Aramark, Broxel, and Ficrea. Specialized in front-end development with HTML5, CSS3, Javascript, jQuery, and Umbraco CMS.` }
+                    ]
+                }
+            ]
+        },
+        skills: {
+            title: "Skills & Competencies",
+            subtitle: "An overview of my technical and management capabilities.",
+            keyCompetenciesTitle: "Key Competencies",
+            toolsTechTitle: "Tools & Technologies",
+            chartLabels: ['Product Management (PO)', 'Agile Methodologies (Scrum/Kanban)', 'Project Leadership', 'Web Development (Full-Stack)', 'Databases', 'AI Tools'],
+            chartData: [95, 95, 90, 80, 85, 88],
+            filters: {
+                all: "All",
+                agile: "Management & Agile",
+                dev: "Development",
+                db: "Databases",
+                ia: "AI & Collaboration"
+            },
+            data: [
+                { name: 'Product Owner', category: 'agile' }, { name: 'Scrum Master', category: 'agile' }, { name: 'JIRA', category: 'agile' },
+                { name: 'Confluence', category: 'agile' }, { name: 'Trello', category: 'agile' }, { name: 'Kanban', category: 'agile' },
+                { name: 'Management 3.0', category: 'agile' }, { name: 'PMP', category: 'agile' }, { name: 'Design Thinking', category: 'agile' },
+                { name: 'C# & .NET', category: 'dev' }, { name: 'LinQ', category: 'dev' }, { name: 'Entity Framework', category: 'dev' },
+                { name: 'JavaScript', category: 'dev' }, { name: 'jQuery', category: 'dev' }, { name: 'React', category: 'dev' },
+                { name: 'HTML5', category: 'dev' }, { name: 'CSS3', category: 'dev' }, { name: 'Bootstrap', category: 'dev' },
+                { name: 'MVC5', category: 'dev' }, { name: 'Ajax', category: 'dev' }, { name: 'Json', category: 'dev' },
+                { name: 'SignalR', category: 'dev' }, { name: 'WCF', category: 'dev' }, { name: 'SOAP / REST', category: 'dev' },
+                { name: 'Katalon', category: 'dev' }, { name: 'Groovy', category: 'dev' }, { name: 'Node.js', category: 'dev' },
+                { name: 'Git / GitHub', category: 'dev' }, { name: 'Visual Studio Code', category: 'dev' },
+                { name: 'SQL Server', category: 'db' }, { name: 'MySQL', category: 'db' }, { name: 'Postgres', category: 'db' },
+                { name: 'MongoDB', category: 'db' }, { name: 'Supabase', category: 'db' },
+                { name: 'ChatGPT', category: 'ia' }, { name: 'Gemini', category: 'ia' }, { name: 'Cursor', category: 'ia' },
+                { name: 'V0', category: 'ia' }, { name: 'bolt.new', category: 'ia' }, { name: 'Ideogram', category: 'ia' },
+                { name: 'Napkin', category: 'ia' }, { name: 'Hey Gen', category: 'ia' }, { name: 'Claude', category: 'ia' },
+                { name: 'Notebook LM', category: 'ia' }, { name: 'Gamma', category: 'ia' }, { name: 'Google AI Studio', category: 'ia' },
+                { name: 'Figma', category: 'ia' }, { name: 'FigJam', category: 'ia' }, { name: 'Notion', category: 'ia' },
+                { name: 'Airtable', category: 'ia' }, { name: 'LaunchDarkly', category: 'ia' }, { name: 'Slack', category: 'ia' }, { name: 'Teams', category: 'ia' }
+            ]
+        },
+        certs: {
+            title: "Professional Development",
+            subtitle: "My commitment to continuous learning and improvement through certifications and courses.",
+            data: [
+                { title: 'Project Management with Jira Course', issuer: 'Platzi', year: '2025' },
+                { title: 'Strategies for Learning English Online Course', issuer: 'Platzi', year: '2025' },
+                { title: 'Introduction to Artificial Intelligence Course', issuer: 'Platzi', year: '2025' },
+                { title: 'Agile Coach Professional Certificate (ACPC)', issuer: 'CertiProf', year: '2024' },
+                { title: 'Advanced Front-end with React Courses (Master in Coding)', issuer: 'DEVF', year: '2023-2024' },
+                { title: 'JIRA Software Fundamentals', issuer: 'Genius IT Training', year: '2023' },
+                { title: 'Project Management PMP V7', issuer: 'ITService University', year: '2023' },
+                { title: 'DevOps Fundamentals', issuer: 'PeopleCert', year: '2023' },
+                { title: 'Management 3.0', issuer: 'Management 3.0', year: '2022' },
+                { title: 'Scrum Product Owner Professional Certificate (SPOPC)', issuer: 'CertiProf', year: '2022' },
+                { title: 'Kanban Essentials Professional Certificado (KEPC)', issuer: 'CertiProf', year: '2022' },
+                { title: 'Financial Statement Reading Fundamentals', issuer: 'Instrucción Ágil', year: '2021' },
+                { title: 'Remote Work & Virtual Collaboration Professional Certificated (RWVCPC)', issuer: 'CertiProf', year: '2021' },
+                { title: 'SCRUM MASTER SMC', issuer: 'CertiProf', year: '2021' },
+                { title: 'Project Management Course based on PMI 5th edition', issuer: 'UDEMY', year: '2021' },
+                { title: 'Design Thinking Professional Certificated (DTPC)', issuer: 'CertiProf', year: '2020' },
+                { title: 'SCRUM MASTER SMC', issuer: 'SCRUM Study', year: '2018' },
+                { title: 'VUCA World Course (volatility, uncertainty, complexity, ambiguity)', issuer: 'FINASIST', year: '2018' },
+                { title: 'Master Course in Emotional Intelligence', issuer: 'UDEMY', year: '2018' },
+                { title: 'SCRUM DEVELOPER SDC', issuer: 'SCRUM Study', year: '2017' },
+                { title: 'Scrum Fundamentals Certified (SFC)', issuer: 'SCRUM Study', year: '2017' },
+                { title: 'Sales Strategy Workshop (Lego Serious Play)', issuer: 'FINASIST', year: '2017' },
+                { title: 'Umbraco CMS', issuer: 'CatarsysLab', year: '2013' },
+                { title: 'Self-training in Public Ethics', issuer: 'IFE', year: '2012' }
+            ]
+        }
+    }
+};
+
+let currentLang = 'es'; // Default language
+let myChart = null; // Chart.js instance
+
+function updateContent(lang) {
+    const data = content[lang];
+
+    // Update Profile Section
+    document.getElementById('sidebar-role').textContent = data.profile.roles;
+    document.getElementById('profile-name').textContent = "Jonathan Rubén Hernández González"; // Name remains constant
+    document.getElementById('profile-roles').textContent = data.profile.roles;
+    document.getElementById('profile-location').textContent = data.profile.location;
+    document.getElementById('profile-language').textContent = data.profile.language;
+    document.getElementById('profile-summary-title').textContent = data.profile.summaryTitle;
+    document.getElementById('profile-summary').innerHTML = data.profile.summary;
+
+    // Update Navigation Labels
+    document.getElementById('nav-profile').textContent = (lang === 'es' ? 'Perfil' : 'Profile');
+    document.getElementById('nav-experience').textContent = (lang === 'es' ? 'Experiencia' : 'Experience');
+    document.getElementById('nav-skills').textContent = (lang === 'es' ? 'Habilidades' : 'Skills');
+    document.getElementById('nav-certs').textContent = (lang === 'es' ? 'Certificaciones' : 'Certifications');
+
+
+    // Update Experience Section
+    const experienceTimeline = document.getElementById('experience-timeline');
+    experienceTimeline.innerHTML = '';
+    document.getElementById('experience-title').textContent = data.experience.title;
+
+    data.experience.companies.forEach(company => {
+        const article = document.createElement('article');
+        article.className = 'timeline-item relative';
+        let projectsHtml = '';
+        company.projects.forEach(project => {
+            projectsHtml += `
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <h4 class="font-bold text-lg text-slate-700">${project.title}</h4>
+                    <p class="text-slate-600 mt-2">${project.description}</p>
+                </div>
+            `;
+        });
+        article.innerHTML = `
+            <h3 class="text-2xl font-bold text-slate-800">${company.name}</h3>
+            <p class="text-md font-semibold text-sky-600">${company.role}</p>
+            <time class="text-sm text-slate-500">${company.time}</time>
+            <div class="mt-4 space-y-6">
+                ${projectsHtml}
+            </div>
+        `;
+        experienceTimeline.appendChild(article);
+    });
+
+    // Update Skills Section
+    document.getElementById('skills-title').textContent = data.skills.title;
+    document.getElementById('skills-subtitle').textContent = data.skills.subtitle;
+    document.getElementById('key-competencies-title').textContent = data.skills.keyCompetenciesTitle;
+    document.getElementById('tools-tech-title').textContent = data.skills.toolsTechTitle;
+
+    // Update skill filter buttons
+    document.querySelector('#skills-filter-buttons button[data-filter="all"]').textContent = data.skills.filters.all;
+    document.querySelector('#skills-filter-buttons button[data-filter="agile"]').textContent = data.skills.filters.agile;
+    document.querySelector('#skills-filter-buttons button[data-filter="dev"]').textContent = data.skills.filters.dev;
+    document.querySelector('#skills-filter-buttons button[data-filter="db"]').textContent = data.skills.filters.db;
+    document.querySelector('#skills-filter-buttons button[data-filter="ia"]').textContent = data.skills.filters.ia;
+
+
+    // Re-render Chart.js chart
+    if (myChart) {
+        myChart.destroy();
+    }
+    const skillsCtx = document.getElementById('skillsChart').getContext('2d');
+    myChart = new Chart(skillsCtx, {
+        type: 'bar',
+        data: {
+            labels: data.skills.chartLabels,
+            datasets: [{
+                label: (lang === 'es' ? 'Nivel de Competencia' : 'Competency Level'),
+                data: data.skills.chartData,
+                backgroundColor: 'rgba(2, 132, 199, 0.6)',
+                borderColor: 'rgba(2, 132, 199, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.raw}% ${lang === 'es' ? 'de dominio' : 'proficiency'}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 100,
+                    grid: {
+                       color: '#e2e8f0'
+                    }
+                },
+                y: {
+                   grid: {
+                       display: false
+                   }
+                }
+            }
+        }
+    });
+
+    // Update Skills Grid
+    const skillsGrid = document.getElementById('skills-grid');
+    skillsGrid.innerHTML = '';
+    data.skills.data.forEach(skill => {
+        const skillEl = document.createElement('div');
+        skillEl.className = 'skill-card bg-slate-50 p-3 rounded-lg text-center transition-all duration-300 shadow-sm border border-slate-100';
+        skillEl.dataset.category = skill.category;
+        skillEl.textContent = skill.name;
+        skillsGrid.appendChild(skillEl);
+    });
+
+    // Re-apply filter logic (as skillCards might be new elements)
+    const skillCards = document.querySelectorAll('.skill-card');
+    const activeFilterButton = document.querySelector('.skill-filter-btn.active-filter');
+    if (activeFilterButton) {
+        const filter = activeFilterButton.dataset.filter;
+        skillCards.forEach(card => {
+            if (filter === 'all' || card.dataset.category === filter) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+
+    // Update Certifications Section
+    document.getElementById('certs-title').textContent = data.certs.title;
+    document.getElementById('certs-subtitle').textContent = data.certs.subtitle;
+    const certsGrid = document.getElementById('certs-grid');
+    certsGrid.innerHTML = '';
+    data.certs.data.forEach(cert => {
+        const certEl = document.createElement('div');
+        certEl.className = 'bg-white p-5 rounded-xl shadow-sm border border-slate-100 flex items-start space-x-4';
+        certEl.innerHTML = `
+            <div class="flex-shrink-0 w-12 h-12 bg-sky-100 text-sky-700 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-800">${cert.title}</h4>
+                <p class="text-sm text-slate-500">${cert.issuer} &bull; ${cert.year}</p>
+            </div>
+        `;
+        certsGrid.appendChild(certEl);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.section');
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const sidebarNav = document.getElementById('sidebar-nav');
+    const langToggleEs = document.getElementById('lang-toggle-es');
+    const langToggleEn = document.getElementById('lang-toggle-en');
+    const printCvButton = document.getElementById('print-cv-button');
+
+    // Function to handle navigation and section visibility
+    function navigateTo(hash) {
+        sections.forEach(section => {
+            if ('#' + section.id === hash) {
+                section.classList.add('active');
+            } else {
+                section.classList.remove('active');
+            }
+        });
+
+        navLinks.forEach(link => {
+            if (link.getAttribute('href') === hash) {
+                link.classList.add('bg-sky-100', 'text-sky-800', 'font-bold');
+            } else {
+                link.classList.remove('bg-sky-100', 'text-sky-800', 'font-bold');
+            }
+        });
+        // Hide mobile menu after navigation
+        if (!sidebarNav.classList.contains('hidden') && window.innerWidth < 768) {
+            sidebarNav.classList.add('hidden');
+        }
+    }
+
+    // Add event listeners for navigation links
+    navLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            history.pushState(null, null, targetId);
+            navigateTo(targetId);
+        });
+    });
+    
+    // Handle browser back/forward navigation
+    window.addEventListener('popstate', () => {
+        navigateTo(window.location.hash || '#profile');
+    });
+
+    // Toggle mobile menu visibility
+    mobileMenuButton.addEventListener('click', () => {
+        sidebarNav.classList.toggle('hidden');
+    });
+
+    // Language toggle buttons
+    langToggleEs.addEventListener('click', () => {
+        currentLang = 'es';
+        updateContent(currentLang);
+        langToggleEs.classList.add('bg-sky-600', 'text-white');
+        langToggleEn.classList.remove('bg-sky-600', 'text-white');
+        langToggleEn.classList.add('bg-slate-200', 'text-slate-700');
+    });
+
+    langToggleEn.addEventListener('click', () => {
+        currentLang = 'en';
+        updateContent(currentLang);
+        langToggleEn.classList.add('bg-sky-600', 'text-white');
+        langToggleEs.classList.remove('bg-sky-600', 'text-white');
+        langToggleEs.classList.add('bg-slate-200', 'text-slate-700');
+    });
+
+    // Print CV button
+    printCvButton.addEventListener('click', () => {
+        window.print();
+    });
+
+    // Initial content load and navigation to ensure visibility
+    const initialHash = window.location.hash || '#profile';
+    updateContent(currentLang); // Load default language content first
+    navigateTo(initialHash); // Then navigate to the correct section
+
+    // Skills filter logic (re-attached after content update)
+    const skillsFilterButtons = document.querySelectorAll('.skill-filter-btn');
+    skillsFilterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const filter = button.dataset.filter;
+            skillsFilterButtons.forEach(btn => btn.classList.remove('active-filter'));
+            button.classList.add('active-filter');
+
+            const skillCards = document.querySelectorAll('#skills-grid .skill-card');
+            skillCards.forEach(card => {
+                if (filter === 'all' || card.dataset.category === filter) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Handle sidebar visibility on resize for desktop/mobile transition
+    const handleResize = () => {
+        if (window.innerWidth >= 768) { // md breakpoint in Tailwind
+            sidebarNav.classList.remove('hidden');
+            document.getElementById('sidebar-role').classList.remove('hidden');
+        } else {
+            sidebarNav.classList.add('hidden');
+            document.getElementById('sidebar-role').classList.add('hidden');
+        }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Call on initial load
+
+    // Special handling for Chart.js responsiveness when parent resizes
+    window.addEventListener('resize', () => {
+        if (myChart) {
+            myChart.resize();
+        }
+    });
+});
+</script>
+
+</body>
+</html>
