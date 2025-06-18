@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV Interactivo | Jonathan Hernández</title>
+    <title>CV | Jonathan Hernández</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,8 +59,8 @@
                 /* Adjusted padding for print to give more space from browser's headers/footers */
                 padding-top: 1.5cm !important;
                 padding-bottom: 1.5cm !important;
-                padding-left: 0.8cm !important; /* Slightly more horizontal padding */
-                padding-right: 0.8cm !important;
+                padding-left: 1cm !important; /* Slightly more horizontal padding */
+                padding-right: 1cm !important;
             }
             .section {
                 display: block !important; /* Show all sections for print */
@@ -107,31 +107,36 @@
                 background-color: #000 !important;
                 border-color: #fff !important;
             }
-            /* Show URLs for print and allow them to wrap */
-            .print-only {
-                display: inline !important;
+            
+            /* Profile print specific styling */
+            #profile-name {
+                font-size: 2.2rem !important; /* Smaller font for name */
+                line-height: 1.1 !important; /* Tighter line height for name */
             }
-            .profile-links {
-                display: flex; /* Use flexbox for the links container */
-                flex-direction: column; /* Stack links vertically */
-                align-items: flex-start; /* Align them to the start */
-                margin-top: 10px; /* Add some top margin */
+            #profile-roles-main {
+                font-size: 1.1rem !important; /* Smaller font for roles */
+                line-height: 1.2 !important; /* Tighter line height for roles */
             }
-            .profile-links a {
-                display: block; /* Make each link take full width */
-                margin-bottom: 5px; /* Space between links */
+            .screen-only-links { /* Hide interactive links in print */
+                display: none !important;
+            }
+            .print-contact-details { /* Show print-specific contact details */
+                display: block !important;
+                margin-top: 10px; /* Space above contact details */
+            }
+            .print-contact-details p {
+                margin-bottom: 2px; /* Small spacing between contact lines */
+                line-height: 1.2; /* Tighter line height for contact info */
+            }
+            .print-contact-details p span {
+                font-size: 0.7rem !important; /* Even smaller font for URLs */
                 word-break: break-all; /* Allow long URLs to wrap */
-                font-size: 0.75rem; /* Smaller font for URLs */
-                line-height: 1.2; /* Tighter line height for smaller text */
-            }
-            .profile-links span {
-                display: none; /* Hide the bullet point separator in print */
             }
         }
 
         /* Hide print-only elements on screen */
         @media screen {
-            .print-only {
+            .print-contact-details {
                 display: none !important;
             }
         }
@@ -172,7 +177,7 @@
             </nav>
             <div class="p-4 border-t border-slate-200 text-center flex justify-center md:block">
                 <button id="lang-toggle-es" class="lang-toggle-btn px-3 py-1 mr-2 rounded-full font-semibold text-sm bg-sky-600 text-white">ES</button>
-                <button id="lang-toggle-en" class="lang-toggle-btn px-3 py-1 rounded-full font-semibold text-sm bg-slate-200 text-slate-700">EN</button>
+                <button id="lang-toggle-en" class="lang-toggle-btn px-3 py-1 rounded-full text-sm font-semibold bg-slate-200 text-slate-700">EN</button>
                 <button id="print-cv-button" class="mt-4 md:mt-2 px-4 py-2 rounded-lg bg-emerald-500 text-white font-semibold text-sm hover:bg-emerald-600 transition-colors duration-200 shadow-md">
                     Imprimir CV (PDF)
                 </button>
@@ -191,13 +196,25 @@
                             <h2 class="text-4xl font-extrabold text-slate-800" id="profile-name">Jonathan Rubén Hernández González</h2>
                             <!-- Updated to include Product Manager in the main profile roles -->
                             <p class="mt-2 text-xl font-medium text-sky-600" id="profile-roles-main"></p>
-                            <div class="mt-4 flex justify-center md:justify-start space-x-4 text-slate-500 profile-links">
-                                <a href="https://www.linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57/" target="_blank" class="hover:text-sky-600 transition-colors">LinkedIn<span class="print-only ml-1"> (https://www.linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57)</span></a>
-                                <span class="hidden md:inline-block">&bull;</span> <!-- Hide bullet on print -->
-                                <a href="https://github.com/jonathanrhernandez" target="_blank" class="hover:text-sky-600 transition-colors">GitHub<span class="print-only ml-1"> (https://github.com/jonathanrhernandez)</span></a>
-                                <span class="hidden md:inline-block">&bull;</span> <!-- Hide bullet on print -->
-                                <a href="mailto:hernandezgonzalezjonathanruben@gmail.com" class="hover:text-sky-600 transition-colors">Email<span class="print-only ml-1"> (hernandezgonzalezjonathanruben@gmail.com)</span></a>
+                            
+                            <!-- Screen-only links (interactive) -->
+                            <div class="mt-4 flex justify-center md:justify-start space-x-4 text-slate-500 screen-only-links">
+                                <a href="https://www.linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57/" target="_blank" class="hover:text-sky-600 transition-colors">LinkedIn</a>
+                                <span>&bull;</span>
+                                <a href="https://github.com/jonathanrhernandez" target="_blank" class="hover:text-sky-600 transition-colors">GitHub</a>
+                                <span>&bull;</span>
+                                <a href="mailto:hernandezgonzalezjonathanruben@gmail.com" class="hover:text-sky-600 transition-colors">Email</a>
                             </div>
+
+                            <!-- Print-only contact details block -->
+                            <div class="print-contact-details text-slate-700">
+                                <p><span id="print-mobile"></span></p>
+                                <p><span id="print-email"></span></p>
+                                <p><span id="print-linkedin"></span></p>
+                                <p><span id="print-github"></span></p>
+                                <p><span id="print-website"></span></p>
+                            </div>
+
                              <p class="mt-1 text-sm text-slate-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block -mt-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
                                 <span id="profile-location"></span>
@@ -284,7 +301,14 @@ const content = {
             location: "Tizayuca, Hidalgo, México",
             language: "Idiomas: Español (Nativo), Inglés (B2+ Conversacional)",
             summaryTitle: "Resumen Profesional",
-            summary: `Desde hace más de 5 años, he trabajado como Product Owner y Scrum Master en un enfoque híbrido, combinando la eficiencia en la entrega de valor con la agilidad en los procesos. Mi carrera en sistemas comenzó en 2013, desarrollándome inicialmente como programador web tanto en front-end como en back-end. Posteriormente, asumí el liderazgo de proyectos, donde coordiné equipos de trabajo y orienté sus esfuerzos hacia resultados exitosos. Como Product Owner, defino y priorizo requisitos que se alinean con las metas de negocio y las necesidades del cliente, asegurando la maximización del valor del producto. Mi rol de Scrum Master me permite gestionar tiempos, resolver problemas con agilidad y orquestar ceremonias que mejoran continuamente la colaboración y el flujo de trabajo del equipo. Además, me dedico a la capacitación en metodologías ágiles, impulsando un ambiente de trabajo proactivo y autónomo. Mi experiencia integral en desarrollo, gestión de proyectos y agilidad me ha dotado de una visión estratégica que me permite organizar objetivos claros, delegar responsabilidades eficazmente y monitorear el avance para asegurar productos de alta calidad en entornos dinámicos. La organización, la planificación y la resolución proactiva de problemas son claves en mi día a día, abordando cada reto con autonomía y un enfoque inquebrantable en la excelencia.`
+            summary: `Desde hace más de 5 años, he trabajado como Product Owner y Scrum Master en un enfoque híbrido, combinando la eficiencia en la entrega de valor con la agilidad en los procesos. Mi carrera en sistemas comenzó en 2013, desarrollándome inicialmente como programador web tanto en front-end como en back-end. Posteriormente, asumí el liderazgo de proyectos, donde coordiné equipos de trabajo y orienté sus esfuerzos hacia resultados exitosos. Como Product Owner, defino y priorizo requisitos que se alinean con las metas de negocio y las necesidades del cliente, asegurando la maximización del valor del producto. Mi rol de Scrum Master me permite gestionar tiempos, resolver problemas con agilidad y orquestar ceremonias que mejoran continuamente la colaboración y el flujo de trabajo del equipo. Además, me dedico a la capacitación en metodologías ágiles, impulsando un ambiente de trabajo proactivo y autónomo. Mi experiencia integral en desarrollo, gestión de proyectos y agilidad me ha dotado de una visión estratégica que me permite organizar objetivos claros, delegar responsabilidades eficazmente y monitorear el avance para asegurar productos de alta calidad en entornos dinámicos. La organización, la planificación y la resolución proactiva de problemas son claves en mi día a día, abordando cada reto con autonomía y un enfoque inquebrantable en la excelencia.`,
+            contact: { // New contact object
+                mobile: "55 6976 1320",
+                email: "hernandezgonzalezjonathanruben@gmail.com",
+                linkedin: "https://www.linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57",
+                github: "https://github.com/jonathanrhernandez",
+                website: "https://jonathanrhernandez.github.io/miCv/"
+            }
         },
         experience: {
             title: "Experiencia Profesional",
@@ -309,7 +333,7 @@ const content = {
                     role: "Ingeniero de Producto (PE / PO)",
                     time: "Mayo 2022 - Junio 2022",
                     projects: [
-                        { title: "Plataforma de Educación Financiera", description: `Actué como vínculo entre el negocio y desarrollo, generando historias de usuario y priorizando el backlog. Propuse mejoras que **incrementaron métricas de UX en un 10-15%** y contribuí a un **crecimiento del 5-10% en indicadores clave**.` }
+                        { title: "Plataforma de Educación Financiera", description: `Actué como vínculo entre el negocio y desarrollo, generando historias de usuario y priorizando el backlog. Propuso mejoras que **incrementaron métricas de UX en un 10-15%** y contribuyó a un **crecimiento del 5-10% en indicadores clave**.` }
                     ]
                 },
                 {
@@ -419,133 +443,14 @@ const content = {
             location: "Tizayuca, Hidalgo, Mexico",
             language: "Languages: Spanish (Native), English (B2+ Conversational)",
             summaryTitle: "Professional Summary",
-            summary: `For over 5 years, I have worked as a Product Owner and Scrum Master in a hybrid approach, combining efficiency in value delivery with agility in processes. My career in systems began in 2013, initially developing as a web programmer in both front-end and back-end. Subsequently, I took on project leadership, where I coordinated work teams and guided their efforts toward successful outcomes. As a Product Owner, I define and prioritize requirements that align with business goals and client needs, ensuring product value maximization. My Scrum Master role allows me to manage timelines, solve problems with agility, and orchestrate ceremonies that continuously improve team collaboration and workflow. Additionally, I am dedicated to training in Agile methodologies, fostering a proactive and autonomous work environment. My comprehensive experience in development, project management, and agility has equipped me with a strategic vision that allows me to organize clear objectives, delegate responsibilities effectively and monitor progress to ensure high-quality products in dynamic environments. Organization, planning, and proactive problem-solving are key in my daily work, approaching each challenge with autonomy and an unwavering focus on excellence.`
-        },
-        experience: {
-            title: "Professional Experience",
-            companies: [
-                {
-                    name: "Arkusnexus (Mind Group)",
-                    role: "Product Owner | Scrum Master",
-                    time: "June 2022 - Present",
-                    projects: [
-                        { title: "AI-Powered Facial Access Control Project (June 2025 - Present)", description: `Contributed to all phases of the development cycle (design, development, testing) of an **office access control system with facial identification**, leveraging Artificial Intelligence tools to optimize the process, achieving **development acceleration of 35-50%** and **process efficiency improvement of 30-45%**. Actively utilized platforms such as **bolt.new, V0, Gemini, ChatGPT, and Cursor** for design and development. Developed the front-end with **React** and the back-end with **Supabase Edge Functions**, using **Supabase** as the database, ensuring a modern and scalable architecture. Collaborated in an autonomous team where the implementation of AI tools has **optimized feature delivery** and **fostered a continuous innovation environment**.` },
-                        { title: "Norden Delivery KPIs Project (April 2025 - June 2025)", description: `Designed and developed a **KPI Module** connected to Jira, GitHub, and Bitbucket via their APIs to obtain key metrics. Created a **Financial Dashboard** visualizing client payments versus employee salaries, **facilitating strategic and financial decision-making by 15-25%**. **Improved visibility of critical metrics by 70-80%**, enabling more agile, data-driven decisions that positively impacted profitability.` },
-                        { title: "Mosaic Project (March 2024 - April 2025)", description: `Led key projects to enhance the strategic finance platform, focusing on financial data integration and management, resulting in a **15-25% improvement in data processing efficiency** and a **10-20% reduction in manual errors**. Implemented **Export to Google Sheets** functionality, optimizing reports for **50-100 users/teams**. Developed a **Google Sheets Add-on** to directly connect metrics and reports, **reducing the time of report preparation by 20-30%**. Delivered **ETL Connectors** (BigQuery, Redshift, Xero, Snowflake, Sage Intacct) for efficient data transformation and loading, **improving data quality by 15-25%** and **expediting access to critical information**. Responsible for defining and prioritizing requirements, coordinating technical teams and validations, and ensuring high-quality deliverables aligned with client needs.` },
-                        { title: "WellFit Project", description: `Led the front-end development of an innovative system for dental clinics, ensuring efficient integration with the backend via APIs. Managed functional requirement definition and prioritization, ensuring intuitive interfaces that **improved operational efficiency by 20-30%**. Coordinated the implementation of components visual and functional for managing users, administrative roles, and clinical records, **reducing the time of record management by 15-25%**. Ensured payment module integration, including banking credit systems, **processing over 500+ transactions monthly**. Served as a key facilitator in cross-functional communication between designers, developers, and stakeholders, **accelerating the delivery cycle by 10-15%**.` },
-                        { title: "Wellness Project", description: `Led the development of an innovative web application to improve user health through voice interaction, OCR-based clinical document analysis, and AI-powered personalized meal plans. Developed clear functional and non-functional requirements, **increasing backlog clarity by 20-30%**. Designed development strategies and coordinated incremental deliveries, **reducing the time to launch new features by 15-25%**. Oversaw voice recognition and OCR technology integration, ensuring **optimal performance in extracting and analyzing thousands of clinical data points**. Managed Agile ceremonies, **improving team efficiency by 10-20%**. Validated key functionalities like personalized meal plan generation, contributing to **improving dietary habits for hundreds of users**.` },
-                        { title: "OCR Project for INE Data Extraction", description: `Participated as Product Owner in an OCR project to extract information from users' voter ID cards (INE) via photos or direct image uploads. Designed and oversaw work cycles, **ensuring high-quality deliverables within established timelines**. Created functional and non-functional specifications in INVEST format, **improving project scope understanding by 20-30%**. Managed the backlog, **optimizing workflow for the engineering team and 5-7 team members**. Oversaw data extraction testing, **improving accuracy in critical information capture by 95-99%**. Achieved an automated workflow that **optimized data capture and reduced identity validation time by 40-60%**.` },
-                        { title: "Drata Project (November 2022 - January 2024)", description: `Served as Product Owner and Scrum Master for a regulatory compliance client (Drata), **ensuring the delivery of 10+ releases with 95-98% quality**. Managed the training process for **20+ collaborators**, and managed all Scrum/Kanban ceremonies, **increasing sprint predictability by 20-30%**.` },
-                        { title: "Nordhen Project", description: `Collaborated on the development of a complex system with 4 modules, managing and coordinating a Scrum team. **Achieved 90-95% compliance with key goals** and **resolved 20-30+ critical incidents**, utilizing tools like Jira, Confluence, and Slack for efficient collaboration.` }
-                    ]
-                },
-                {
-                    name: "Coru (Compara Gurú)",
-                    role: "Product Engineer (PE / PO)",
-                    time: "May 2022 - June 2022",
-                    projects: [
-                        { title: "Financial Education Platform", description: `Acted as a link between business and development, generating user stories and prioritizing the backlog. Proposed improvements that **increased UX metrics by 10-15%** and contributed to **5-10% growth in key KPIs**.` }
-                    ]
-                },
-                {
-                    name: "Finasist S.A. de C.V.",
-                    role: "Product Owner (2019 - 2022) | Project Leader (2017 - 2019) | .Net Developer (2015 - 2017)",
-                    time: "August 2015 - May 2022",
-                    projects: [
-                        { title: "Multiple Credit Systems", description: `As Product Owner, I improved development efficiency by **15-20%**. As Project Leader, I managed the development of **5+ key systems** and **reduced delivery times by 10-20%**. Oversaw the creation of an automated testing robot that **decreased testing time by 30-50%**.` }
-                    ]
-                },
-                {
-                    name: "Catarsyslab / Solertia Group",
-                    role: ".Net Developer / Front-end",
-                    time: "August 2013 - August 2015",
-                    projects: [
-                        { title: "Custom System Development", description: `Developed multiple custom web systems (access control, account statements, intranets) for clients such as Aramark, Broxel, and Ficrea. Specialized in front-end development with HTML5, CSS3, Javascript, jQuery, and Umbraco CMS.` }
-                    ]
-                }
-            ]
-        },
-        skills: {
-            title: "Skills & Competencies",
-            subtitle: "An overview of my technical and management capabilities.",
-            keyCompetenciesTitle: "Key Competencies",
-            toolsTechTitle: "Tools & Technologies",
-            chartLabels: ['Product Management (PO)', 'Agile Methodologies (Scrum/Kanban)', 'Project Leadership', 'Web Development (Full-Stack)', 'Databases', 'AI Tools'],
-            chartData: [95, 95, 90, 80, 85, 88],
-            filters: {
-                all: "All",
-                agile: "Management & Agile",
-                dev: "Development",
-                db: "Databases",
-                ia: "AI & Collaboration"
-            },
-            data: [
-                { name: 'Product Owner', category: 'agile' }, { name: 'Scrum Master', category: 'agile' }, { name: 'JIRA', category: 'agile' },
-                { name: 'Confluence', category: 'agile' }, { name: 'Trello', category: 'agile' }, { name: 'Kanban', category: 'agile' },
-                { name: 'Management 3.0', category: 'agile' }, { name: 'PMP', category: 'agile' }, { name: 'Design Thinking', category: 'agile' },
-                // Development Skills
-                { name: 'C# & .NET', category: 'dev' }, { name: 'LinQ', category: 'dev' }, { name: 'Entity Framework', category: 'dev' },
-                { name: 'JavaScript', category: 'dev' }, { name: 'jQuery', category: 'dev' }, { name: 'React', category: 'dev' },
-                { name: 'HTML5', category: 'dev' }, { name: 'CSS3', category: 'dev' }, { name: 'DHTML', category: 'dev' }, { name: 'DOM', category: 'dev' },
-                { name: 'RAZOR', category: 'dev' }, { name: 'XSLT', category: 'dev' }, { name: 'Bootstrap', category: 'dev' },
-                { name: 'ASP', category: 'dev' }, { name: 'MVC5', category: 'dev' }, { name: 'Layered Development', category: 'dev' },
-                { name: 'Ajax', category: 'dev' }, { name: 'Json', category: 'dev' }, { name: 'SignalR', category: 'dev' },
-                { name: 'WCF', category: 'dev' }, { name: 'Regular Expressions', category: 'dev' }, { name: 'Lambda Expressions', category: 'dev' },
-                { name: 'SOAP / REST', category: 'dev' }, { name: 'Katalon', category: 'dev' }, { name: 'Groovy', category: 'dev' },
-                { name: 'Node.js', category: 'dev' }, { name: 'Git / GitHub', category: 'dev' }, { name: 'Visual Studio Code', category: 'dev' },
-                { name: 'Windows (OS)', category: 'dev' }, { name: 'Mac OS (OS)', category: 'dev' }, { name: 'Notepad++', category: 'dev' },
-                { name: 'Umbraco CMS', category: 'dev' }, { name: 'TFS (Team Foundation Server)', category: 'dev' }, { name: 'FTP (Filezilla)', category: 'dev' },
-                // Databases
-                { name: 'SQL Server', category: 'db' }, { name: 'MySQL', category: 'db' }, { name: 'Postgres', category: 'db' },
-                { name: 'MongoDB', category: 'db' }, { name: 'Supabase', category: 'db' },
-                // AI & Collaboration Tools
-                { name: 'ChatGPT', category: 'ia' }, { name: 'Gemini', category: 'ia' }, { name: 'Cursor', category: 'ia' },
-                { name: 'V0', category: 'ia' }, { name: 'bolt.new', category: 'ia' }, { name: 'Ideogram', category: 'ia' },
-                { name: 'Napkin', category: 'ia' }, { name: 'Hey Gen', category: 'ia' }, { name: 'Claude', category: 'ia' },
-                { name: 'Notebook LM', category: 'ia' }, { name: 'Gamma', category: 'ia' }, { name: 'Google AI Studio', category: 'ia' },
-                { name: 'Figma', category: 'ia' }, { name: 'FigJam', category: 'ia' }, { name: 'Notion', category: 'ia' },
-                { name: 'Airtable', category: 'ia' }, { name: 'LaunchDarkly', category: 'ia' }, { name: 'Slack', category: 'ia' },
-                { name: 'Teams', category: 'ia' }, { name: 'Adobe Fireworks', category: 'ia' }, { name: 'Adobe Photoshop', category: 'ia' },
-                { name: 'Mockups / Wireframing', category: 'ia' }, { name: 'Microsoft Office Suite', category: 'ia' },
-                { name: 'Microsoft Visio', category: 'ia' }, { name: 'Team Viewer', category: 'ia' },
-                { name: 'Zoho Suite', category: 'ia' }, { name: 'Google Workspace', category: 'ia' }, { name: 'Open VPN', category: 'ia' }
-            ]
-        },
-        education: {
-            title: "Education",
-            degreeTitle: "Bachelor's degree in Administrative Informatics. ID: 6849641",
-            university: "Technological Superior Studies of Ecatepec (TESE)",
-            period: "August 2005 - October 2010"
-        },
-        certs: {
-            title: "Professional Development",
-            subtitle: "My commitment to continuous learning and improvement through certifications and courses.",
-            data: [
-                { title: 'Project Management with Jira Course', issuer: 'Platzi', year: '2025' },
-                { title: 'Strategies for Learning English Online Course', issuer: 'Platzi', year: '2025' },
-                { title: 'Introduction to Artificial Intelligence Course', issuer: 'Platzi', year: '2025' },
-                { title: 'Agile Coach Professional Certificate (ACPC)', issuer: 'CertiProf', year: '2024' },
-                { title: 'Advanced Front-end with React Courses (Master in Coding)', issuer: 'DEVF', year: '2023-2024' },
-                { title: 'JIRA Software Fundamentals', issuer: 'Genius IT Training', year: '2023' },
-                { title: 'Project Management PMP V7', issuer: 'ITService University', year: '2023' },
-                { title: 'DevOps Fundamentals', issuer: 'PeopleCert', year: '2023' },
-                { title: 'Management 3.0', issuer: 'Management 3.0', year: '2022' },
-                { title: 'Scrum Product Owner Professional Certificate (SPOPC)', issuer: 'CertiProf', year: '2022' },
-                { title: 'Kanban Essentials Professional Certificated (KEPC)', issuer: 'CertiProf', year: '2022' },
-                { title: 'Financial Statement Reading Fundamentals', issuer: 'Instrucción Ágil', year: '2021' },
-                { title: 'Remote Work & Virtual Collaboration Professional Certificated (RWVCPC)', issuer: 'CertiProf', year: '2021' },
-                { title: 'SCRUM MASTER SMC', issuer: 'CertiProf', year: '2021' },
-                { title: 'Project Management Course based on PMI 5th edition', issuer: 'UDEMY', year: '2021' },
-                { title: 'Design Thinking Professional Certificated (DTPC)', issuer: 'CertiProf', year: '2020' },
-                { title: 'SCRUM MASTER SMC', issuer: 'SCRUM Study', year: '2018' },
-                { title: 'VUCA World Course (volatility, uncertainty, complexity, ambiguity)', issuer: 'FINASIST', year: '2018' },
-                { title: 'Master Course in Emotional Intelligence', issuer: 'UDEMY', year: '2018' },
-                { title: 'SCRUM DEVELOPER SDC', issuer: 'SCRUM Study', year: '2017' },
-                { title: 'Scrum Fundamentals Certified (SFC)', issuer: 'SCRUM Study', year: '2017' },
-                { title: 'Sales Strategy Workshop (Lego Serious Play)', issuer: 'FINASIST', year: '2017' },
-                { title: 'Umbraco CMS', issuer: 'CatarsysLab', year: '2013' },
-                { title: 'Self-training in Public Ethics', issuer: 'IFE', year: '2012' }
-            ]
+            summary: `For over 5 years, I have worked as a Product Owner and Scrum Master in a hybrid approach, combining efficiency in value delivery with agility in processes. My career in systems began in 2013, initially developing as a web programmer in both front-end and back-end. Subsequently, I took on project leadership, where I coordinated work teams and guided their efforts toward successful outcomes. As a Product Owner, I define and prioritize requirements that align with business goals and client needs, ensuring product value maximization. My Scrum Master role allows me to manage timelines, solve problems with agility, and orchestrate ceremonies that continuously improve team collaboration and workflow. Additionally, I am dedicated to training in Agile methodologies, fostering a proactive and autonomous work environment. My comprehensive experience in development, project management, and agility has equipped me with a strategic vision that allows me to organize clear objectives, delegate responsibilities effectively and monitor progress to ensure high-quality products in dynamic environments. Organization, planning, and proactive problem-solving are key in my daily work, approaching each challenge with autonomy and an unwavering focus on excellence.`,
+            contact: { // New contact object
+                mobile: "55 6976 1320",
+                email: "hernandezgonzalezjonathanruben@gmail.com",
+                linkedin: "https://www.linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57",
+                github: "https://github.com/jonathanrhernandez",
+                website: "https://jonathanrhernandez.github.io/miCv/"
+            }
         }
     }
 };
@@ -569,6 +474,14 @@ function updateContent(lang) {
     document.getElementById('profile-language').textContent = data.profile.language;
     document.getElementById('profile-summary-title').textContent = data.profile.summaryTitle;
     document.getElementById('profile-summary').innerHTML = data.profile.summary;
+
+    // Update print-only contact info
+    document.getElementById('print-mobile').textContent = `${lang === 'es' ? 'Móvil' : 'Mobile'}: ${data.profile.contact.mobile}`;
+    document.getElementById('print-email').textContent = `Email: ${data.profile.contact.email}`;
+    document.getElementById('print-linkedin').textContent = `LinkedIn: ${data.profile.contact.linkedin}`;
+    document.getElementById('print-github').textContent = `GitHub: ${data.profile.contact.github}`;
+    document.getElementById('print-website').textContent = `${lang === 'es' ? 'Sitio Web' : 'Website'}: ${data.profile.contact.website}`;
+
 
     // Update Navigation Labels
     document.getElementById('nav-profile').textContent = (lang === 'es' ? 'Perfil' : 'Profile');
@@ -786,7 +699,10 @@ document.addEventListener('DOMContentLoaded', function () {
     langToggleEs.addEventListener('click', () => {
         currentLang = 'es';
         updateContent(currentLang);
+        // Ensure both buttons have consistent styling based on active/inactive state
+        langToggleEs.classList.remove('bg-slate-200', 'text-slate-700');
         langToggleEs.classList.add('bg-sky-600', 'text-white');
+        
         langToggleEn.classList.remove('bg-sky-600', 'text-white');
         langToggleEn.classList.add('bg-slate-200', 'text-slate-700');
     });
@@ -794,7 +710,10 @@ document.addEventListener('DOMContentLoaded', function () {
     langToggleEn.addEventListener('click', () => {
         currentLang = 'en';
         updateContent(currentLang);
+        // Ensure both buttons have consistent styling based on active/inactive state
+        langToggleEn.classList.remove('bg-slate-200', 'text-slate-700');
         langToggleEn.classList.add('bg-sky-600', 'text-white');
+
         langToggleEs.classList.remove('bg-sky-600', 'text-white');
         langToggleEs.classList.add('bg-slate-200', 'text-slate-700');
     });
