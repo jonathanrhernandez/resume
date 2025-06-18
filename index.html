@@ -56,16 +56,16 @@
             main {
                 margin-left: 0 !important;
                 width: 100% !important;
-                /* Adjust padding for print to give more space */
-                padding-top: 1cm !important;
-                padding-bottom: 1cm !important;
-                padding-left: 0.5cm !important;
-                padding-right: 0.5cm !important;
+                /* Adjusted padding for print to give more space from browser's headers/footers */
+                padding-top: 1.5cm !important;
+                padding-bottom: 1.5cm !important;
+                padding-left: 0.8cm !important; /* Slightly more horizontal padding */
+                padding-right: 0.8cm !important;
             }
             .section {
                 display: block !important; /* Show all sections for print */
                 page-break-before: always; /* Force new page before each section */
-                /* Add more margin for clear separation between sections in print */
+                /* Increased margin for clear separation between sections in print */
                 margin-top: 1.5cm !important; 
                 margin-bottom: 1.5cm !important; 
                 page-break-after: auto; /* Allow content to flow naturally within section */
@@ -107,13 +107,25 @@
                 background-color: #000 !important;
                 border-color: #fff !important;
             }
-            /* Show URLs for print */
+            /* Show URLs for print and allow them to wrap */
             .print-only {
                 display: inline !important;
+            }
+            .profile-links {
+                display: flex; /* Use flexbox for the links container */
+                flex-direction: column; /* Stack links vertically */
+                align-items: flex-start; /* Align them to the start */
+                margin-top: 10px; /* Add some top margin */
             }
             .profile-links a {
                 display: block; /* Make each link take full width */
                 margin-bottom: 5px; /* Space between links */
+                word-break: break-all; /* Allow long URLs to wrap */
+                font-size: 0.75rem; /* Smaller font for URLs */
+                line-height: 1.2; /* Tighter line height for smaller text */
+            }
+            .profile-links span {
+                display: none; /* Hide the bullet point separator in print */
             }
         }
 
@@ -180,11 +192,11 @@
                             <!-- Updated to include Product Manager in the main profile roles -->
                             <p class="mt-2 text-xl font-medium text-sky-600" id="profile-roles-main"></p>
                             <div class="mt-4 flex justify-center md:justify-start space-x-4 text-slate-500 profile-links">
-                                <a href="https://www.linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57/" target="_blank" class="hover:text-sky-600 transition-colors">LinkedIn<span class="print-only text-xs text-slate-500 ml-1">(linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57)</span></a>
-                                <span>&bull;</span>
-                                <a href="https://github.com/jonathanrhernandez" target="_blank" class="hover:text-sky-600 transition-colors">GitHub<span class="print-only text-xs text-slate-500 ml-1">(github.com/jonathanrhernandez)</span></a>
-                                <span>&bull;</span>
-                                <a href="mailto:hernandezgonzalezjonathanruben@gmail.com" class="hover:text-sky-600 transition-colors">Email<span class="print-only text-xs text-slate-500 ml-1">(hernandezgonzalezjonathanruben@gmail.com)</span></a>
+                                <a href="https://www.linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57/" target="_blank" class="hover:text-sky-600 transition-colors">LinkedIn<span class="print-only ml-1"> (https://www.linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57)</span></a>
+                                <span class="hidden md:inline-block">&bull;</span> <!-- Hide bullet on print -->
+                                <a href="https://github.com/jonathanrhernandez" target="_blank" class="hover:text-sky-600 transition-colors">GitHub<span class="print-only ml-1"> (https://github.com/jonathanrhernandez)</span></a>
+                                <span class="hidden md:inline-block">&bull;</span> <!-- Hide bullet on print -->
+                                <a href="mailto:hernandezgonzalezjonathanruben@gmail.com" class="hover:text-sky-600 transition-colors">Email<span class="print-only ml-1"> (hernandezgonzalezjonathanruben@gmail.com)</span></a>
                             </div>
                              <p class="mt-1 text-sm text-slate-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block -mt-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
