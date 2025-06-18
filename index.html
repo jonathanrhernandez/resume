@@ -112,7 +112,7 @@
         <aside class="w-full md:w-64 bg-white md:border-r border-b md:border-b-0 border-slate-200 sticky top-0 md:h-screen z-20">
             <div class="flex justify-between items-center p-4 md:p-6 border-b md:border-b-0 border-slate-200">
                 <h1 class="text-xl font-bold text-sky-700">Jonathan Hernández</h1>
-                <!-- Role title always visible on desktop, hidden on mobile to save space -->
+                <!-- Role title for sidebar (hidden on desktop, visible on mobile menu toggle) -->
                 <p class="text-sm text-slate-500 mt-1 hidden md:block leading-tight whitespace-normal" id="sidebar-role"></p>
                 <button id="mobile-menu-button" class="md:hidden p-2 rounded-lg text-slate-700 hover:bg-sky-100">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -329,8 +329,8 @@ const content = {
         },
         education: { // Nueva sección de educación
             title: "Educación",
-            degreeTitle: "Licenciatura en informática administrativa. Cedula: 6849641",
-            university: "TECNOLÓGICO DE ESTUDIOS SUPERIORES DE ECATEPEC (TESE)",
+            degreeTitle: "Licenciatura en Informática Administrativa. Cédula: 6849641",
+            university: "Tecnológico de Estudios Superiores de Ecatepec (TESE)",
             period: "Agosto 2005 - Octubre 2010"
         },
         certs: {
@@ -370,7 +370,7 @@ const content = {
             location: "Tizayuca, Hidalgo, Mexico",
             language: "Languages: Spanish (Native), English (B2+ Conversational)",
             summaryTitle: "Professional Summary",
-            summary: `For over 5 years, I have worked as a Product Owner and Scrum Master in a hybrid approach, combining efficiency in value delivery with agility in processes. My career in systems began in 2013, initially developing as a web programmer in both front-end and back-end. Subsequently, I took on project leadership, where I coordinated work teams and guided their efforts toward successful outcomes. As a Product Owner, I define and prioritize requirements that align with business goals and client needs, ensuring product value maximization. My Scrum Master role allows me to manage timelines, solve problems with agility, and orchestrate ceremonies that continuously improve team collaboration and workflow. Additionally, I am dedicated to training in Agile methodologies, fostering a proactive and autonomous work environment. My comprehensive experience in development, project management, and agility has equipped me with a strategic vision that allows me to organize clear objectives, delegate responsibilities effectively, and monitor progress to ensure high-quality products in dynamic environments. Organization, planning, and proactive problem-solving are key in my daily work, approaching each challenge with autonomy and an unwavering focus on excellence.`
+            summary: `For over 5 years, I have worked as a Product Owner and Scrum Master in a hybrid approach, combining efficiency in value delivery with agility in processes. My career in systems began in 2013, initially developing as a web programmer in both front-end and back-end. Subsequently, I took on project leadership, where I coordinated work teams and guided their efforts toward successful outcomes. As a Product Owner, I define and prioritize requirements that align with business goals and client needs, ensuring product value maximization. My Scrum Master role allows me to manage timelines, solve problems with agility, and orchestrate ceremonies that continuously improve team collaboration and workflow. Additionally, I am dedicated to training in Agile methodologies, fostering a proactive and autonomous work environment. My comprehensive experience in development, project management, and agility has equipped me with a strategic vision that allows me to organize clear objectives, delegate responsibilities effectively and monitor progress to ensure high-quality products in dynamic environments. Organization, planning, and proactive problem-solving are key in my daily work, approaching each challenge with autonomy and an unwavering focus on excellence.`
         },
         experience: {
             title: "Professional Experience",
@@ -454,7 +454,7 @@ const content = {
         education: { // Nueva sección de educación
             title: "Education",
             degreeTitle: "Bachelor's degree in Administrative Informatics. ID: 6849641",
-            university: "TECHNOLOGICAL SUPERIOR STUDIES OF ECATEPEC (TESE)",
+            university: "Technological Superior Studies of Ecatepec (TESE)",
             period: "August 2005 - October 2010"
         },
         certs: {
@@ -497,7 +497,17 @@ function updateContent(lang) {
     const data = content[lang];
 
     // Update Profile Section
-    document.getElementById('sidebar-role').textContent = data.profile.roles;
+    // Hide sidebar-role element on desktop sizes
+    const sidebarRoleElement = document.getElementById('sidebar-role');
+    if (window.innerWidth >= 768) { // Corresponds to Tailwind's md breakpoint
+        sidebarRoleElement.classList.add('hidden');
+    } else {
+        // Only show if mobile menu is open (handled by mobileMenuButton click)
+        // Ensure it has basic styles when not hidden for mobile menu open state
+        sidebarRoleElement.classList.remove('hidden'); 
+    }
+    sidebarRoleElement.textContent = data.profile.roles; // Keep text content updated for when it is visible
+
     document.getElementById('profile-name').textContent = "Jonathan Rubén Hernández González"; // Name remains constant
     document.getElementById('profile-roles-main').textContent = data.profile.roles; // Use the new ID for the main profile section
     document.getElementById('profile-location').textContent = data.profile.location;
@@ -765,10 +775,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const sidebarRoleElement = document.getElementById('sidebar-role');
         if (window.innerWidth >= 768) { // md breakpoint in Tailwind
             sidebarNav.classList.remove('hidden');
-            sidebarRoleElement.classList.remove('hidden'); // Ensure it's shown on desktop
+            // Hide the sidebar-role element on desktop
+            sidebarRoleElement.classList.add('hidden'); 
         } else {
-            sidebarNav.classList.add('hidden'); // Hide nav on mobile by default
-            sidebarRoleElement.classList.add('hidden'); // Hide role title on mobile
+            // On mobile, sidebar-nav is initially hidden, sidebar-role should also be hidden
+            // It will be shown along with sidebar-nav when mobile-menu-button is clicked
+            sidebarNav.classList.add('hidden'); 
+            sidebarRoleElement.classList.add('hidden');
         }
     };
 
