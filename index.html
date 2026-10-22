@@ -1,529 +1,956 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jonathan Rubén Hernández González — AI Enablement Engineer</title>
-  <meta name="description" content="AI Enablement Engineer. Sitio de Jonathan Rubén Hernández González, con trayectoria, cursos y certificaciones. El CV corto está en PDF.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --ink: #1e293b;
-      --muted: #475569;
-      --line: #e2e8f0;
-      --sky: #0369a1;
-      --sky-soft: #f0f9ff;
-      --bg: #f8fafc;
-      --card: #fff;
+    body { font-family: "Inter", "Segoe UI", sans-serif; }
+    .section { display: none; }
+    .section.active { display: block; animation: rise .28s ease; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: none; }
     }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Calibri, Arial, sans-serif;
-      color: var(--ink);
-      background: var(--bg);
-      line-height: 1.5;
-    }
-    a { color: var(--sky); }
-    .wrap { max-width: 920px; margin: 0 auto; padding: 0 20px 64px; }
-    header.top {
-      position: sticky;
-      top: 0;
-      z-index: 2;
-      background: rgba(248, 250, 252, 0.95);
-      border-bottom: 1px solid var(--line);
-      backdrop-filter: blur(8px);
-    }
-    .top-inner {
-      max-width: 920px;
-      margin: 0 auto;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: center;
-    }
-    nav { display: flex; flex-wrap: wrap; gap: 12px 16px; }
-    nav a { color: var(--ink); text-decoration: none; font-size: 0.92rem; }
-    nav a:hover { color: var(--sky); }
-    .lang-switch { display: flex; gap: 6px; }
-    .lang-switch button {
-      border: 0;
-      border-radius: 999px;
-      padding: 4px 12px;
-      font-weight: 700;
-      cursor: pointer;
-      background: #e2e8f0;
-      color: #334155;
-    }
-    .lang-switch button[aria-pressed="true"] { background: var(--sky); color: #fff; }
-    .hero {
-      display: flex;
-      gap: 24px;
-      align-items: center;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 24px;
-      margin-top: 20px;
-    }
-    .hero img {
-      width: 140px;
-      height: 140px;
-      object-fit: cover;
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -31px;
+      top: 2px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
-      border: 4px solid #e0f2fe;
-      flex: 0 0 auto;
+      background: #0284c7;
+      border: 3px solid #f0f9ff;
+      transition: transform .2s ease;
     }
-    h1 { font-size: 1.8rem; line-height: 1.15; margin: 0 0 4px; }
-    .title { margin: 0 0 8px; color: var(--sky); font-size: 1.15rem; font-weight: 700; }
-    .contact { margin: 0; color: var(--muted); font-size: 0.95rem; }
-    .contact a { color: inherit; }
-    h2 { font-size: 1.35rem; margin: 32px 0 12px; }
-    h3 { font-size: 1.05rem; margin: 0 0 2px; }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 16px 18px;
-      margin: 0 0 12px;
-    }
-    .meta { margin: 0 0 8px; color: var(--muted); }
-    ul { margin: 8px 0 0; padding-left: 1.15rem; }
-    li { margin: 0 0 4px; }
-    .group { margin: 0 0 8px; }
-    .note { color: var(--muted); font-size: 0.95rem; }
-    .lang[hidden] { display: none !important; }
-    @media (max-width: 700px) {
-      .hero { flex-direction: column; text-align: center; }
-      .top-inner { align-items: flex-start; }
+    .timeline-item:hover::before { transform: scale(1.15); }
+    .assign-body { display: none; }
+    .assign-body.open { display: block; animation: rise .22s ease; }
+    .chev { transition: transform .2s ease; }
+    .chev.open { transform: rotate(90deg); }
+    .skill-card { transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease; }
+    .skill-card:hover { transform: translateY(-3px); }
+    .nav-link { transition: background-color .2s ease, color .2s ease; }
+    #diploma-modal { display: none; }
+    #diploma-modal.open { display: flex; }
+    @media screen { .print-contact-details { display: none !important; } }
+    @media print {
+      aside, #mobile-menu-button, #print-cv-button, #skills-filter-buttons, #certs-filter-buttons, #diploma-modal { display: none !important; }
+      main { margin: 0 !important; width: 100% !important; padding: 0 !important; }
+      .section { display: block !important; animation: none !important; }
+      .assign-body { display: block !important; }
+      .shadow-sm, .shadow-md { box-shadow: none !important; }
     }
   </style>
 </head>
-<body>
-  <header class="top">
-    <div class="top-inner">
-      <nav aria-label="Secciones">
-        <a href="#perfil"><span class="lang es">Perfil</span><span class="lang en" hidden>Profile</span></a>
-        <a href="#experiencia" data-jump="experiencia"><span class="lang es">Experiencia</span><span class="lang en" hidden>Experience</span></a>
-        <a href="#habilidades" data-jump="habilidades"><span class="lang es">Habilidades</span><span class="lang en" hidden>Skills</span></a>
-        <a href="#formacion" data-jump="formacion"><span class="lang es">Formación</span><span class="lang en" hidden>Credentials</span></a>
+<body class="bg-slate-50 text-slate-700">
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <aside class="w-full md:w-64 bg-white md:border-r border-b md:border-b-0 border-slate-200 sticky top-0 md:h-screen z-20 md:overflow-y-auto">
+      <div class="flex justify-between items-center p-4 md:p-6 border-b md:border-b-0 border-slate-200">
+        <div>
+          <h1 class="text-xl font-bold text-sky-700">Jonathan Hernández</h1>
+          <p id="sidebar-role" class="text-sm text-slate-500 mt-1 leading-tight hidden">AI Enablement Engineer</p>
+        </div>
+        <button id="mobile-menu-button" class="md:hidden p-2 rounded-lg text-slate-700 hover:bg-sky-100 transition-colors duration-200" aria-label="Menú">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+      </div>
+      <nav id="sidebar-nav" class="hidden md:block p-4">
+        <ul class="space-y-2">
+          <li><a href="#profile" class="nav-link flex items-center px-4 py-2 text-slate-700 rounded-lg hover:bg-sky-50 hover:text-sky-700"><span id="nav-profile"></span></a></li>
+          <li><a href="#experience" class="nav-link flex items-center px-4 py-2 text-slate-700 rounded-lg hover:bg-sky-50 hover:text-sky-700"><span id="nav-experience"></span></a></li>
+          <li><a href="#skills" class="nav-link flex items-center px-4 py-2 text-slate-700 rounded-lg hover:bg-sky-50 hover:text-sky-700"><span id="nav-skills"></span></a></li>
+          <li><a href="#education" class="nav-link flex items-center px-4 py-2 text-slate-700 rounded-lg hover:bg-sky-50 hover:text-sky-700"><span id="nav-education"></span></a></li>
+          <li><a href="#certs" class="nav-link flex items-center px-4 py-2 text-slate-700 rounded-lg hover:bg-sky-50 hover:text-sky-700"><span id="nav-certs"></span></a></li>
+        </ul>
       </nav>
-      <div class="lang-switch" role="group" aria-label="Idioma">
-        <button type="button" id="btn-es" aria-pressed="true">ES</button>
-        <button type="button" id="btn-en" aria-pressed="false">EN</button>
+      <div class="p-4 border-t border-slate-200 text-center flex justify-center gap-2 md:block">
+        <button id="lang-toggle-es" type="button" class="px-3 py-1 mr-0 md:mr-2 rounded-full font-semibold text-sm bg-sky-600 text-white transition-colors duration-200">ES</button>
+        <button id="lang-toggle-en" type="button" class="px-3 py-1 rounded-full text-sm font-semibold bg-slate-200 text-slate-700 transition-colors duration-200">EN</button>
+        <button id="print-cv-button" type="button" class="mt-0 md:mt-3 px-4 py-2 rounded-lg bg-emerald-500 text-white font-semibold text-sm hover:bg-emerald-600 transition-colors duration-200 shadow-md"></button>
       </div>
-    </div>
-  </header>
+    </aside>
 
-  <div class="wrap">
-    <section class="hero" id="perfil">
-      <img src="Foto 2.png" alt="Jonathan Rubén Hernández González">
-      <div>
-        <h1>Jonathan Rubén Hernández González</h1>
-        <p class="title">AI Enablement Engineer</p>
-        <p class="contact">Tecámac, México · +52 55 6976 1320 · <a href="mailto:hernandezgonzalezjonathanruben@gmail.com">hernandezgonzalezjonathanruben@gmail.com</a></p>
-        <p class="contact">
-          <a href="https://www.linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57/">LinkedIn</a> ·
-          <a href="https://github.com/jonathanrhernandez">GitHub</a> ·
-          <a href="https://jonathanrhernandez.github.io/resume/">jonathanrhernandez.github.io/resume</a>
-        </p>
-        <p class="lang es">Español nativo. Inglés B2+. Duolingo English Test 125, tope del rango B2. C1 empieza en 130.</p>
-        <p class="lang en" hidden>Native Spanish. English B2+. Duolingo English Test 125, the top of the B2 range. C1 starts at 130.</p>
-        <p class="lang es"><a href="cv/CV-Jonathan-Hernandez-ES.pdf">CV de dos páginas (PDF)</a></p>
-        <p class="lang en" hidden><a href="cv/CV-Jonathan-Hernandez-EN.pdf">Two-page CV (PDF)</a></p>
-      </div>
-    </section>
+    <main class="flex-1 p-4 sm:p-6 lg:p-10">
+      <section id="profile" class="section active">
+        <div class="bg-white p-8 rounded-2xl shadow-sm">
+          <div class="flex flex-col md:flex-row items-center">
+            <img src="Foto 2.png" alt="Jonathan Rubén Hernández González" class="w-40 h-40 rounded-full object-cover border-4 border-sky-100 shadow-md mb-6 md:mb-0 md:mr-8">
+            <div class="text-center md:text-left">
+              <h2 class="text-4xl font-extrabold text-slate-800">Jonathan Rubén Hernández González</h2>
+              <p class="mt-2 text-xl font-medium text-sky-600" id="profile-roles-main"></p>
+              <div class="mt-4 flex flex-wrap justify-center md:justify-start gap-x-3 gap-y-1 text-slate-500">
+                <a href="mailto:hernandezgonzalezjonathanruben@gmail.com" class="hover:text-sky-600 transition-colors duration-200">hernandezgonzalezjonathanruben@gmail.com</a>
+                <span>·</span>
+                <a href="https://www.linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57/" target="_blank" class="hover:text-sky-600 transition-colors duration-200">LinkedIn</a>
+                <span>·</span>
+                <a href="https://github.com/jonathanrhernandez" target="_blank" class="hover:text-sky-600 transition-colors duration-200">GitHub</a>
+                <span>·</span>
+                <a href="https://jonathanrhernandez.github.io/resume/" class="hover:text-sky-600 transition-colors duration-200">jonathanrhernandez.github.io/resume</a>
+              </div>
+              <div class="mt-2">
+                <a id="profile-pdf" class="text-sm text-sky-700 hover:text-sky-900 transition-colors duration-200" href="cv/CV-Jonathan-Hernandez-ES.pdf"></a>
+              </div>
+              <div class="print-contact-details text-slate-700">
+                <p>hernandezgonzalezjonathanruben@gmail.com</p>
+                <p>https://www.linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57/</p>
+                <p>https://github.com/jonathanrhernandez</p>
+                <p>https://jonathanrhernandez.github.io/resume/</p>
+              </div>
+              <p class="mt-2 text-sm text-slate-500" id="profile-language"></p>
+            </div>
+          </div>
+          <hr class="my-8 border-slate-200">
+          <h3 class="text-2xl font-bold text-slate-800 mb-4" id="profile-summary-title"></h3>
+          <div class="space-y-4 text-lg text-slate-600 leading-relaxed" id="profile-summary"></div>
+        </div>
+      </section>
 
-    <div class="lang es">
-      <h2>Resumen</h2>
-      <div class="card">
-        <p>AI Enablement Engineer en Shopline, dentro de ArkusNexus, con clientes de Estados Unidos. Product owner, product manager y scrum master describen el oficio, no el título: defino el valor y las prioridades, escribo los requisitos y cuido el flujo del equipo. Estoy en software desde 2013 y en producto desde 2019. Hoy construyo con IA. Desde junio de 2026, en paralelo, desarrollo solo y en remoto todo el producto de una SOFOM en México.</p>
-      </div>
+      <section id="experience" class="section">
+        <h2 class="text-3xl font-bold text-slate-800 mb-8" id="experience-title"></h2>
+        <div class="relative border-l-2 border-sky-200 pl-10 space-y-12" id="experience-timeline"></div>
+      </section>
 
-      <h2 id="experiencia" data-section="experiencia">Experiencia</h2>
+      <section id="skills" class="section">
+        <h2 class="text-3xl font-bold text-slate-800 mb-2" id="skills-title"></h2>
+        <p class="text-lg text-slate-600 mb-8" id="skills-subtitle"></p>
+        <div class="bg-white p-8 rounded-2xl shadow-sm">
+          <h3 class="text-2xl font-bold text-slate-800 mb-4" id="tools-tech-title"></h3>
+          <div class="mb-6 flex flex-wrap justify-center gap-2" id="skills-filter-buttons"></div>
+          <div id="skills-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+        </div>
+      </section>
 
-      <article class="card">
-        <h3>Shopline, dentro de ArkusNexus — AI Enablement Engineer</h3>
-        <p class="meta">Agosto 2025 – actualidad. Clientes de Estados Unidos. Product manager en la práctica.</p>
-        <ul>
-          <li>Sigo en ArkusNexus. Shopline es el trabajo vigente dentro de esa empresa. Escribo PRD, alcance y criterios de aceptación, y doy seguimiento a la entrega. El desarrollo de las integraciones lo lleva el equipo: en los PRD no figuro como engineering owner.</li>
-          <li>Nodos custom de n8n para tiendas DTC: pedidos, inventario, fulfillment y devoluciones, con webhooks sobre la API de la plataforma.</li>
-          <li>Integraciones de ERP, 3PL, impuestos, ShipBob, Passport y Redo. Requisitos para envío internacional con impuestos y aranceles, envíos multicarrier, fulfillment con un 3PL y pagos con cumplimiento para la venta de alcohol.</li>
-          <li>Tiendas DTC: tema, QA, punch list contra el diseño aprobado en Figma, performance y accesibilidad. Hay un go-live documentado el 13 de julio de 2026.</li>
-          <li>Status semanal en inglés para los stakeholders del programa. Coordino un squad de front, back y diseño. Participo en el scrum de Norteamérica, demos, retrospectivas y talleres de UX.</li>
-          <li>En un sandbox de logística comprobé que el hold de fulfillment no se puede forzar por API y que la edición de la orden sí. El hallazgo cambió el diseño, en lugar de copiar la documentación del proveedor.</li>
-          <li>Definí el flujo de un retainer de mantenimiento: solicitud, triage, estimación en un día hábil, ticket, QA en escritorio y móvil, entrega y reporte mensual.</li>
-          <li>Llevo el tracker de entrega del equipo. Desde septiembre de 2026 la fuente es Monday.com. La definición de done de una integración: app instalable y prueba de punta a punta.</li>
-          <li>Material bilingüe de la anatomía de un ecommerce y workshops de UX sobre descubrimiento, conversión, suscripciones y ticket promedio.</li>
-          <li>Sesiones presenciales del programa el 16 de junio y el 25 de septiembre de 2026.</li>
-        </ul>
-      </article>
+      <section id="education" class="section">
+        <h2 class="text-3xl font-bold text-slate-800 mb-8" id="education-title"></h2>
+        <div class="bg-white p-8 rounded-2xl shadow-sm">
+          <h3 class="text-2xl font-bold text-slate-800 mb-2" id="degree-title"></h3>
+          <p class="text-lg text-slate-600" id="university"></p>
+          <p class="text-slate-500" id="education-period"></p>
+        </div>
+      </section>
 
-      <article class="card">
-        <h3>SOFOM, México — Freelance</h3>
-        <p class="meta">Junio 2026 – actualidad. Remoto. Construyo solo todo el producto, con IA.</p>
-        <ul>
-          <li>SaaS multi-tenant de marca blanca para la gestión de crédito de una SOFOM no regulada.</li>
-          <li>Aplicación web y API: originación, mesa de control, prevención de lavado, productos y catálogos, cartera con tabla de amortización, cierre diario, tesorería con dispersión SPEI, cobranza y pólizas contables, además de instituciones, usuarios, roles y marca.</li>
-          <li>Stack: Next.js, React, TypeScript, Tailwind CSS, Supabase y n8n.</li>
-          <li>El proyecto sigue en construcción, con cierre estimado en diciembre de 2026.</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h3>Pruebas de concepto para clientes de Estados Unidos — ArkusNexus</h3>
-        <p class="meta">2025</p>
-        <ul>
-          <li>Septiembre 2025. POC notarial con IA.</li>
-          <li>Agosto 2025. POC inmobiliario de lujo.</li>
-          <li>Noviembre 2025. USAVIONICS: POC de flota de drones, misiones y GPS.</li>
-          <li>Octubre 2025. Advanta Connect: product owner interino de una app de sales enablement y prototipos de marca blanca.</li>
-          <li>Julio–agosto 2025. Krystal: POC de atracción de talento con matching, en React.</li>
-          <li>Junio–julio 2025. Control de accesos facial con IA. Front en React y funciones de Supabase.</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h3>ArkusNexus (Grupo Mind) — Product Owner y Scrum Master</h3>
-        <p class="meta">Junio 2022 – actualidad. Tijuana, Baja California. Shopline, arriba, es el trabajo vigente dentro de la misma empresa.</p>
-        <ul>
-          <li>Acuerdo objetivos de negocio y me hago responsable de ellos. Planeo funcionalidades y componentes, escribo requerimientos INVEST, coordino los ciclos y cuido la calidad y el tiempo de las liberaciones.</li>
-          <li>Doy soporte técnico, gestiono el onboarding y reporto cada ciclo y liberación al cliente. Herramientas de ese rol: Jira, Confluence, Slack, la suite de Google y Basecamp.</li>
-          <li>El contexto del sistema es un programa de 5 proyectos, cada uno con un equipo Scrum, un equipo core en Kanban y un equipo adicional de UI/UX en Kanban.</li>
-          <li>Drata, noviembre 2022 – enero 2024. Product owner y scrum master en un producto de cumplimiento. Más de 10 liberaciones y capacitación de más de 20 personas.</li>
-          <li>Mosaic, marzo 2024 – abril 2025. Plataforma de finanzas: exportación a Google Sheets, un add-on y conectores ETL (BigQuery, Redshift, Xero, Snowflake y Sage Intacct).</li>
-          <li>Norden, abril – junio 2025. Módulo de KPIs con Jira, GitHub y Bitbucket, y un dashboard financiero. El 30 de abril de 2025, como product owner, trabajé la estabilización del módulo de delivery: backlog, blockers, QA y el orden del repositorio en Bitbucket. También un sistema Norden de 4 módulos.</li>
-          <li>WellFit. Front de clínicas dentales: usuarios, roles, expedientes y pagos, con más de 500 transacciones al mes.</li>
-          <li>Wellness. Aplicación con voz, OCR clínico y planes de alimentación con IA.</li>
-          <li>OCR de credencial para votar (INE). Product owner de un equipo de 5 a 7 personas.</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h3>Coru (Compara Gurú) — Ingeniero de producto</h3>
-        <p class="meta">Mayo 2022 – junio 2022. Ciudad de México.</p>
-        <ul>
-          <li>Vínculo entre negocio y desarrollo: levantamiento, historias de usuario y priorización del backlog.</li>
-          <li>Validación en desarrollo, QA y producción, y criterios de aceptación. Prototipos y mejoras de experiencia. El perfil registra 4 KPI.</li>
-          <li>Plataforma de educación financiera: crédito personal, de auto e hipotecario, tarjetas, ahorro, inversiones, afore y pyme.</li>
-          <li>Herramientas: suite de Google, Trello, Slack, analytics, MongoDB y MySQL.</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h3>Finasist — Product owner, líder de proyecto y desarrollador .NET</h3>
-        <p class="meta">Agosto 2015 – mayo 2022. Ciudad de México.</p>
-        <ul>
-          <li>Sistemas de crédito, en tres etapas: desarrollador .NET (2015–2017), líder de proyecto (2017–2019) y product owner (2019–2022).</li>
-          <li>Más de 5 sistemas y un robot de pruebas.</li>
-          <li>En la etapa de desarrollo, software financiero con ASP.NET MVC, Bootstrap, jQuery, Ajax, CSS y SQL Server, en Scrum.</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h3>Catarsyslab / Grupo Solertia — Desarrollador .NET y front-end</h3>
-        <p class="meta">Agosto 2013 – agosto 2015. Ciudad de México.</p>
-        <ul>
-          <li>Sistemas a medida: control de accesos, estados de cuenta e intranets, para Aramark, Broxel y Ficrea.</li>
-          <li>ASP.NET, C# y SQL. Front-end con HTML, CSS, JavaScript y jQuery. Gestión de contenido en Umbraco.</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h3>Antes de 2013</h3>
-        <p class="meta">Varios de estos empleos se empalman.</p>
-        <ul>
-          <li>Dirección General del Servicio Público de Localización Telefónica (LOCATEL). Encargado de área (Tramitel) y operador telefónico. Enero 2007 – noviembre 2013. Coyoacán. Atención a quejas, coordinación de turno y trámites.</li>
-          <li>SERTEC. Administrativo de cobranza. Enero 2013 – marzo 2013. Depuración de una base de cobranza.</li>
-          <li>Instituto Federal Electoral. Técnico en capacitación electoral. Julio 2012 – diciembre 2012.</li>
-          <li>Universidad de Ecatepec. Docente de informática y matemáticas. Agosto 2011 – junio 2012.</li>
-          <li>Autotransporte terrestre Mo. Chofer de taxi federal. Diciembre 2010 – julio 2011. Aeropuerto Internacional de Toluca.</li>
-        </ul>
-      </article>
-
-      <h2 id="habilidades" data-section="habilidades">Habilidades</h2>
-      <div class="card">
-        <p class="group"><strong>Producto y entrega.</strong> PRD y BRD, backlog, Scrum, Kanban, requerimientos INVEST, criterios de aceptación, métricas de sprint, punch list contra diseño aprobado, Jira, Confluence, Monday.com, Trello, Slack y Google Workspace.</p>
-        <p class="group"><strong>IA y automatización.</strong> n8n (nodos custom, workflows y webhooks), Cursor, Claude, ChatGPT, Gemini, ingeniería de prompts y context engineering.</p>
-        <p class="group"><strong>Aplicaciones.</strong> Next.js, React, TypeScript, Tailwind CSS, JavaScript, HTML, CSS y Supabase (PostgreSQL, autenticación y archivos).</p>
-        <p class="group"><strong>Shopline.</strong> Admin, webhooks, checkout, apps y temas. Figma para handoff y revisión, no como oficio principal.</p>
-        <p class="group"><strong>Datos.</strong> PostgreSQL, SQL Server, MySQL y MongoDB.</p>
-        <p class="group"><strong>Base anterior.</strong> C#, .NET, ASP.NET MVC, jQuery, Bootstrap, Umbraco, Git y GitHub.</p>
-      </div>
-
-      <h2 id="formacion" data-section="formacion">Certificaciones</h2>
-      <p class="note">Credenciales de examen. El nombre, el emisor y el año salen del diploma. La de product owner es SPOPC de CertiProf.</p>
-      <ul>
-        <li>Agile Coach Professional Certificate (ACPC). CertiProf. 2024.</li>
-        <li>PeopleCert DevOps Fundamentals. PeopleCert. 2023. Examen aprobado. Es el certificado oficial; la carta de enero de 2023 es solo asistencia al curso de preparación.</li>
-        <li>Scrum Product Owner Professional Certificate (SPOPC). CertiProf. 2022.</li>
-        <li>Kanban Essentials Professional Certificate (KEPC). CertiProf. 2022.</li>
-        <li>Scrum Master Professional Certificate (SMPC). CertiProf. 2021.</li>
-        <li>Design Thinking Professional Certificate (DTPC). CertiProf. 2020.</li>
-        <li>Scrum Master Certified (SMC). SCRUMstudy. 2018.</li>
-        <li>Scrum Developer Certified (SDC). SCRUMstudy. 2017.</li>
-        <li>Scrum Fundamentals Certified (SFC). SCRUMstudy. 2017.</li>
-      </ul>
-
-      <h2>Cursos y constancias</h2>
-      <p class="note">Con diploma o constancia. El curso de gerencia PMP no es la certificación del PMI.</p>
-      <ul>
-        <li>Context engineering, 9 h. Platzi. 2026.</li>
-        <li>Reto Agent Builders. Platzi. 2026. El diploma no imprime horas.</li>
-        <li>Curso de n8n, 10 h. Platzi. Octubre 2026.</li>
-        <li>Curso de Notion, 19 h. Platzi. 2026.</li>
-        <li>Claude Code para no programadores, 9 h. Platzi. 2026.</li>
-        <li>Debugging con Chrome DevTools, 18 h. Platzi. 2026.</li>
-        <li>Supabase avanzado, 16 h. Platzi. 2026.</li>
-        <li>Identificar y vencer el síndrome del impostor en el trabajo, 7 h. Platzi. 2026.</li>
-        <li>Curso para ser CEO, 13 h. Platzi. 2026.</li>
-        <li>Supabase, 10 h. Platzi. 2026.</li>
-        <li>Platzi Conf CDMX 2026, asistencia presencial, 7 h. Platzi. 2026.</li>
-        <li>Claude AI, 9 h. Platzi. 2026.</li>
-        <li>Gemini, 14 h. Platzi. 2026.</li>
-        <li>Creación de páginas web con v0, 7 h. Platzi. 2026.</li>
-        <li>Sistemas de diseño con Figma, 12 h. Platzi. 2026.</li>
-        <li>Curso completo de n8n: automatización con IA, sin programar, 9 h. G-Talent.net. 2026.</li>
-        <li>Figma: técnicas avanzadas de diseño, 21 h. Platzi y Torresburriel Estudio. 2026.</li>
-        <li>Figma, 12 h. Platzi. 2026.</li>
-        <li>Fundamentos de diseño de interfaces UX/UI, 15 h. Platzi y Torresburriel Estudio. 2025.</li>
-        <li>ChatGPT, 16 h. Platzi. 2025.</li>
-        <li>Prompt engineering, 13 h. Platzi. 2025.</li>
-        <li>Lovable para crear páginas web sin programar, 10 h. Platzi. 2025.</li>
-        <li>Git y GitHub, 24 h. Platzi. 2025.</li>
-        <li>Programación básica, 29 h. Platzi. 2025.</li>
-        <li>Cursor AI Code Editor, 11 h. Platzi. 2025.</li>
-        <li>Inglés intermedio alto B2: Assumptions and Instructions, 16 h. Platzi. 2025.</li>
-        <li>Introducción a Google Cloud Platform, 8 h. Google Cloud y Platzi. 2025.</li>
-        <li>Curso de n8n, 9 h. Platzi. Julio 2025.</li>
-        <li>Visual Studio Code: mejora tu velocidad para codificar. DevTalles (Fernando Herrera). 2025.</li>
-        <li>Fundamentos de ingeniería de software, 14 h. Platzi. 2025.</li>
-        <li>Comunicación efectiva para equipos de trabajo, 8 h. Platzi. 2025.</li>
-        <li>Gestión de proyectos con Jira, 12 h. Platzi. 2025.</li>
-        <li>Strategies to Learn English Online, 11 h. Platzi. 2025.</li>
-        <li>Introducción a la inteligencia artificial, 4 h. Platzi. 2025.</li>
-        <li>Master en Código. DEV.F. Constancia de participación, no de egreso. Inicio en noviembre de 2023, carta de enero de 2025, duración declarada de 12 meses. HTML, CSS, JavaScript y React.</li>
-        <li>Gerencia de la transformación empresarial. Preparly. 2023. Asistencia.</li>
-        <li>Taller Jira Software Fundamentos, 6 h. Fernando Jiménez. 2023.</li>
-        <li>Gerencia de proyectos PMP, 45 h. IT Service University. 2023. Es un curso, no la certificación PMP del PMI.</li>
-        <li>Curso de preparación DevOps. Fernando Jiménez. Enero 2023. Asistencia. No sustituye al certificado de PeopleCert.</li>
-        <li>Management 3.0, taller del 17 al 20 de octubre. Management 3.0, facilitador Fernando Jiménez. 2022.</li>
-      </ul>
-
-      <h2>Educación</h2>
-      <div class="card">
-        <h3>Licenciatura en Informática Administrativa</h3>
-        <p class="meta">Tecnológico de Estudios Superiores de Ecatepec (TESE). Agosto 2005 – octubre 2010. Cédula 6849641.</p>
-      </div>
-    </div>
-
-    <div class="lang en" hidden>
-      <h2>Summary</h2>
-      <div class="card">
-        <p>AI Enablement Engineer at Shopline, inside ArkusNexus, working with clients in the United States. Product owner, product manager, and scrum master describe the work, not the headline: I set value and priorities, write requirements, and keep the team’s flow. I have been in software since 2013 and in product since 2019. I now build with AI. Since June 2026, in parallel, I have been remotely freelancing the entire product for a SOFOM in Mexico, on my own.</p>
-      </div>
-
-      <h2 data-section="experiencia">Experience</h2>
-
-      <article class="card">
-        <h3>Shopline, inside ArkusNexus — AI Enablement Engineer</h3>
-        <p class="meta">August 2025 – present. Clients in the United States. Product manager in practice.</p>
-        <ul>
-          <li>I am still at ArkusNexus. Shopline is the current work inside that company. I write PRDs, scope, and acceptance criteria, and follow delivery. The team builds the integrations: the PRDs do not list me as engineering owner.</li>
-          <li>Custom n8n nodes for DTC stores: orders, inventory, fulfillment, and returns, with webhooks on top of the platform API.</li>
-          <li>ERP, 3PL, tax, ShipBob, Passport, and Redo integrations. Requirements for international shipping with duties and taxes, multicarrier shipping, 3PL fulfillment, and payments that meet alcohol-sales compliance.</li>
-          <li>DTC stores: theme, QA, punch list against the approved Figma design, performance, and accessibility. One documented go-live on July 13, 2026.</li>
-          <li>Weekly status in English for the program stakeholders. I coordinate a squad of front end, back end, and design. I take part in the North America scrum, demos, retrospectives, and UX workshops.</li>
-          <li>In a logistics sandbox I confirmed that a fulfillment hold cannot be forced through the API and that order editing can. The finding changed the design, instead of copying the vendor’s documentation.</li>
-          <li>I defined a maintenance-retainer flow: request, triage, estimate within one business day, ticket, desktop and mobile QA, delivery, and a monthly report.</li>
-          <li>I keep the team’s delivery tracker. Monday.com has been the source since September 2026. Done for an integration means an installable app and an end-to-end test.</li>
-          <li>Bilingual material on the anatomy of an ecommerce site, and UX workshops on discovery, conversion, subscriptions, and average order value.</li>
-          <li>In-person program sessions on June 16 and September 25, 2026.</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h3>SOFOM, Mexico — Freelance</h3>
-        <p class="meta">June 2026 – present. Remote. I build the entire product alone, with AI.</p>
-        <ul>
-          <li>White-label, multi-tenant SaaS for credit management at an unregulated SOFOM.</li>
-          <li>Web application and API: origination, control desk, anti-money-laundering checks, credit products and catalogs, portfolio and amortization schedule, daily close, treasury with SPEI disbursements, collections, accounting entries, plus institutions, users, roles, and brand.</li>
-          <li>Stack: Next.js, React, TypeScript, Tailwind CSS, Supabase, and n8n.</li>
-          <li>Still in progress, with an estimated close in December 2026.</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h3>Proofs of concept for clients in the United States — ArkusNexus</h3>
-        <p class="meta">2025</p>
-        <ul>
-          <li>September 2025. Notary POC with AI.</li>
-          <li>August 2025. Luxury real-estate POC.</li>
-          <li>November 2025. USAVIONICS: drone-fleet POC, missions and GPS.</li>
-          <li>October 2025. Advanta Connect: interim product owner for a sales-enablement app and white-label prototypes.</li>
-          <li>July–August 2025. Krystal: talent-attraction POC with matching, in React.</li>
-          <li>June–July 2025. Facial access-control POC with AI. React front end and Supabase edge functions.</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h3>ArkusNexus (Grupo Mind) — Product Owner and Scrum Master</h3>
-        <p class="meta">June 2022 – present. Tijuana, Baja California. Shopline, above, is the current work inside the same company.</p>
-        <ul>
-          <li>I agree business objectives and own them. I plan features and components, write INVEST requirements, coordinate the cycles, and watch release quality and timing.</li>
-          <li>I give technical support, manage onboarding, and report each cycle and release to the client. Tools for that role: Jira, Confluence, Slack, Google Workspace, and Basecamp.</li>
-          <li>The system context is a program of 5 projects, each with a Scrum team, a core Kanban team, and an additional UI/UX Kanban team.</li>
-          <li>Drata, November 2022 – January 2024. Product owner and scrum master on a compliance product. More than 10 releases and training for more than 20 people.</li>
-          <li>Mosaic, March 2024 – April 2025. Finance platform: export to Google Sheets, an add-on, and ETL connectors (BigQuery, Redshift, Xero, Snowflake, and Sage Intacct).</li>
-          <li>Norden, April – June 2025. KPI module from Jira, GitHub, and Bitbucket, plus a financial dashboard. On April 30, 2025, as product owner, I worked on stabilizing the delivery module: backlog, blockers, QA, and the Bitbucket repository. Also a 4-module Norden system.</li>
-          <li>WellFit. Front end for dental clinics: users, roles, clinical records, and payments, with more than 500 transactions a month.</li>
-          <li>Wellness. An application with voice, clinical OCR, and AI meal plans.</li>
-          <li>Voter-ID (INE) OCR. Product owner for a team of 5 to 7 people.</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h3>Coru (Compara Gurú) — Product Engineer</h3>
-        <p class="meta">May 2022 – June 2022. Mexico City.</p>
-        <ul>
-          <li>Link between business and development: discovery, user stories, and backlog prioritization.</li>
-          <li>Validation in development, QA, and production, plus acceptance criteria. Prototypes and experience improvements. The profile records 4 KPIs.</li>
-          <li>Financial-education platform: personal, auto, and mortgage credit, cards, savings, investments, retirement funds, and small business.</li>
-          <li>Tools: Google Workspace, Trello, Slack, analytics, MongoDB, and MySQL.</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h3>Finasist — Product owner, project leader, and .NET developer</h3>
-        <p class="meta">August 2015 – May 2022. Mexico City.</p>
-        <ul>
-          <li>Credit systems, in three stages: .NET developer (2015–2017), project leader (2017–2019), and product owner (2019–2022).</li>
-          <li>More than 5 systems and a test robot.</li>
-          <li>In the development stage, financial software with ASP.NET MVC, Bootstrap, jQuery, Ajax, CSS, and SQL Server, under Scrum.</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h3>Catarsyslab / Grupo Solertia — .NET and front-end developer</h3>
-        <p class="meta">August 2013 – August 2015. Mexico City.</p>
-        <ul>
-          <li>Custom systems: access control, account statements, and intranets, for Aramark, Broxel, and Ficrea.</li>
-          <li>ASP.NET, C#, and SQL. Front end with HTML, CSS, JavaScript, and jQuery. Content management in Umbraco.</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h3>Before 2013</h3>
-        <p class="meta">Several of these jobs overlap.</p>
-        <ul>
-          <li>Dirección General del Servicio Público de Localización Telefónica (LOCATEL). Area lead (Tramitel) and phone operator. January 2007 – November 2013. Coyoacán. Complaints, shift coordination, and administrative procedures.</li>
-          <li>SERTEC. Collections clerk. January 2013 – March 2013. Cleanup of a collections database.</li>
-          <li>Instituto Federal Electoral. Electoral-training technician. July 2012 – December 2012.</li>
-          <li>Universidad de Ecatepec. Computer science and mathematics teacher. August 2011 – June 2012.</li>
-          <li>Autotransporte terrestre Mo. Federal taxi driver. December 2010 – July 2011. Toluca International Airport.</li>
-        </ul>
-      </article>
-
-      <h2 data-section="habilidades">Skills</h2>
-      <div class="card">
-        <p class="group"><strong>Product and delivery.</strong> PRDs and BRDs, backlog, Scrum, Kanban, INVEST requirements, acceptance criteria, sprint metrics, punch list against an approved design, Jira, Confluence, Monday.com, Trello, Slack, and Google Workspace.</p>
-        <p class="group"><strong>AI and automation.</strong> n8n (custom nodes, workflows, and webhooks), Cursor, Claude, ChatGPT, Gemini, prompt engineering, and context engineering.</p>
-        <p class="group"><strong>Applications.</strong> Next.js, React, TypeScript, Tailwind CSS, JavaScript, HTML, CSS, and Supabase (PostgreSQL, authentication, and files).</p>
-        <p class="group"><strong>Shopline.</strong> Admin, webhooks, checkout, apps, and themes. Figma for handoff and review, not as a primary craft.</p>
-        <p class="group"><strong>Data.</strong> PostgreSQL, SQL Server, MySQL, and MongoDB.</p>
-        <p class="group"><strong>Earlier stack.</strong> C#, .NET, ASP.NET MVC, jQuery, Bootstrap, Umbraco, Git, and GitHub.</p>
-      </div>
-
-      <h2 data-section="formacion">Certifications</h2>
-      <p class="note">Exam credentials. Name, issuer, and year come from the diploma. The product-owner credential is SPOPC from CertiProf.</p>
-      <ul>
-        <li>Agile Coach Professional Certificate (ACPC). CertiProf. 2024.</li>
-        <li>PeopleCert DevOps Fundamentals. PeopleCert. 2023. Exam passed. This is the official certificate; the January 2023 letter is attendance at the preparation course only.</li>
-        <li>Scrum Product Owner Professional Certificate (SPOPC). CertiProf. 2022.</li>
-        <li>Kanban Essentials Professional Certificate (KEPC). CertiProf. 2022.</li>
-        <li>Scrum Master Professional Certificate (SMPC). CertiProf. 2021.</li>
-        <li>Design Thinking Professional Certificate (DTPC). CertiProf. 2020.</li>
-        <li>Scrum Master Certified (SMC). SCRUMstudy. 2018.</li>
-        <li>Scrum Developer Certified (SDC). SCRUMstudy. 2017.</li>
-        <li>Scrum Fundamentals Certified (SFC). SCRUMstudy. 2017.</li>
-      </ul>
-
-      <h2>Courses and certificates of completion</h2>
-      <p class="note">Backed by a diploma or attendance record. The PMP project-management course is not the PMI certification.</p>
-      <ul>
-        <li>Context engineering, 9 hours. Platzi. 2026.</li>
-        <li>Agent Builders challenge. Platzi. 2026. The diploma does not print hours.</li>
-        <li>n8n course, 10 hours. Platzi. October 2026.</li>
-        <li>Notion course, 19 hours. Platzi. 2026.</li>
-        <li>Claude Code for non-programmers, 9 hours. Platzi. 2026.</li>
-        <li>Debugging with Chrome DevTools, 18 hours. Platzi. 2026.</li>
-        <li>Advanced Supabase, 16 hours. Platzi. 2026.</li>
-        <li>Identifying and overcoming impostor syndrome at work, 7 hours. Platzi. 2026.</li>
-        <li>Course on becoming a CEO, 13 hours. Platzi. 2026.</li>
-        <li>Supabase, 10 hours. Platzi. 2026.</li>
-        <li>Platzi Conf Mexico City 2026, in-person attendance, 7 hours. Platzi. 2026.</li>
-        <li>Claude AI, 9 hours. Platzi. 2026.</li>
-        <li>Gemini, 14 hours. Platzi. 2026.</li>
-        <li>Building web pages with v0, 7 hours. Platzi. 2026.</li>
-        <li>Design systems with Figma, 12 hours. Platzi. 2026.</li>
-        <li>Complete n8n course: AI automation without programming, 9 hours. G-Talent.net. 2026.</li>
-        <li>Figma: advanced design techniques, 21 hours. Platzi and Torresburriel Estudio. 2026.</li>
-        <li>Figma, 12 hours. Platzi. 2026.</li>
-        <li>UX/UI interface design fundamentals, 15 hours. Platzi and Torresburriel Estudio. 2025.</li>
-        <li>ChatGPT, 16 hours. Platzi. 2025.</li>
-        <li>Prompt engineering, 13 hours. Platzi. 2025.</li>
-        <li>Lovable for building websites without programming, 10 hours. Platzi. 2025.</li>
-        <li>Git and GitHub, 24 hours. Platzi. 2025.</li>
-        <li>Basic programming, 29 hours. Platzi. 2025.</li>
-        <li>Cursor AI Code Editor, 11 hours. Platzi. 2025.</li>
-        <li>Upper-intermediate English B2: Assumptions and Instructions, 16 hours. Platzi. 2025.</li>
-        <li>Introduction to Google Cloud Platform, 8 hours. Google Cloud and Platzi. 2025.</li>
-        <li>n8n course, 9 hours. Platzi. July 2025.</li>
-        <li>Visual Studio Code: improve your coding speed. DevTalles (Fernando Herrera). 2025.</li>
-        <li>Software engineering fundamentals, 14 hours. Platzi. 2025.</li>
-        <li>Effective communication for work teams, 8 hours. Platzi. 2025.</li>
-        <li>Project management with Jira, 12 hours. Platzi. 2025.</li>
-        <li>Strategies to Learn English Online, 11 hours. Platzi. 2025.</li>
-        <li>Introduction to artificial intelligence, 4 hours. Platzi. 2025.</li>
-        <li>Master en Código. DEV.F. Participation certificate, not a graduation diploma. Started November 2023, letter dated January 2025, stated length 12 months. HTML, CSS, JavaScript, and React.</li>
-        <li>Business transformation management. Preparly. 2023. Attendance.</li>
-        <li>Jira Software fundamentals workshop, 6 hours. Fernando Jiménez. 2023.</li>
-        <li>PMP project management, 45 hours. IT Service University. 2023. This is a course, not the PMI PMP certification.</li>
-        <li>DevOps preparation course. Fernando Jiménez. January 2023. Attendance. It does not replace the PeopleCert certificate.</li>
-        <li>Management 3.0, workshop from October 17 to 20. Management 3.0, facilitator Fernando Jiménez. 2022.</li>
-      </ul>
-
-      <h2>Education</h2>
-      <div class="card">
-        <h3>Bachelor’s degree in Administrative Informatics</h3>
-        <p class="meta">Tecnológico de Estudios Superiores de Ecatepec (TESE). August 2005 – October 2010. Professional license 6849641.</p>
-      </div>
-    </div>
+      <section id="certs" class="section">
+        <h2 class="text-3xl font-bold text-slate-800 mb-2" id="certs-title"></h2>
+        <p class="text-lg text-slate-600 mb-6" id="certs-subtitle"></p>
+        <div class="mb-6 flex flex-wrap gap-2" id="certs-filter-buttons"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="certs-grid"></div>
+      </section>
+    </main>
   </div>
 
-  <script>
-    function setLang(lang) {
-      var next = lang === "en" ? "en" : "es";
-      document.documentElement.lang = next;
-      document.querySelectorAll(".lang").forEach(function (el) {
-        el.hidden = !el.classList.contains(next);
+  <div id="diploma-modal" class="fixed inset-0 z-50 items-center justify-center bg-slate-900/70 p-4" role="dialog" aria-modal="true" aria-labelledby="diploma-title">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden">
+      <div class="flex items-center justify-between gap-4 px-4 py-3 border-b border-slate-200">
+        <h3 id="diploma-title" class="font-bold text-slate-800"></h3>
+        <button id="diploma-close" type="button" class="px-3 py-1 rounded-lg bg-slate-200 text-slate-800 font-semibold hover:bg-slate-300 transition-colors duration-200"></button>
+      </div>
+      <div id="diploma-body" class="flex-1 min-h-0 bg-slate-100"></div>
+    </div>
+  </div>
+<script>
+let currentLang = "es";
+let skillFilter = "all";
+let certFilter = "all";
+
+const content = {
+  es: {
+    print: "Imprimir CV",
+    pdfLabel: "CV de dos páginas",
+    pdfHref: "cv/CV-Jonathan-Hernandez-ES.pdf",
+    close: "Cerrar",
+    viewDiploma: "Ver diploma",
+    role: "AI Enablement Engineer",
+    language: "Español nativo. Inglés B2+. Duolingo English Test 125, tope del rango B2. C1 empieza en 130.",
+    summaryTitle: "Resumen",
+    summary: [
+      "Mi carrera en sistemas comenzó en 2013, como programador web en front-end y back-end. Después asumí el liderazgo de proyectos y, desde 2019, trabajo como Product Owner y Scrum Master. Ese trabajo no se queda en la gestión. Recorro el flujo completo: levanto y priorizo requerimientos, armo el producto y los POCs, y también desarrollo, pruebo y automatizo.",
+      "Hoy estoy en ArkusNexus, desde junio de 2022. Desde agosto de 2025 estoy asignado a Shopline, donde construí la mayoría de los nodos custom de n8n, desarrollo los flujos y participo en las pruebas, las iteraciones y el soporte. En paralelo, desde junio de 2026, construyo solo y con IA todo el producto de una SOFOM en México, desde el diseño. Las demás cuentas son de Estados Unidos.",
+      "Como Scrum Master cuido tiempos, impedimentos y el flujo del equipo. Como Product Owner alineo el producto con el negocio y el cliente. La organización y la resolución de problemas siguen en el día a día, ahora también en el código y en las automatizaciones."
+    ],
+    nav: ["Perfil", "Experiencia", "Habilidades", "Educación", "Certificaciones"],
+    caseLabels: { problem: "Problema.", built: "Construyó.", result: "Resultado." },
+    experienceTitle: "Experiencia",
+    jobs: [
+      {
+        name: "ArkusNexus (Grupo Mind)",
+        role: "Product Owner y Scrum Master",
+        time: "Junio 2022 – actualidad",
+        place: "Tijuana, Baja California",
+        note: "Este es el empleo, desde junio de 2022. Las cuentas de abajo son asignaciones, cada una con su periodo. Shopline no es el empleo entero. El trabajo incluye desarrollo y uso de IA, además de Scrum Master y de producto.",
+        problem: "Las cuentas necesitan a quien cuide tiempos e impedimentos, alinee el producto con el negocio y también construya.",
+        built: "Requerimientos INVEST, coordinación de ciclos y reporte de cada liberación. En el desarrollo entran los nodos, los flujos, las pruebas y las automatizaciones de cada asignación. Herramientas de este rol: Jira, Confluence, Slack, Google Workspace y Basecamp.",
+        result: "El contexto del rol es un programa de 5 proyectos con equipo Scrum, un equipo core en Kanban y un equipo de UI/UX en Kanban.",
+        accounts: [
+          {
+            open: true,
+            title: "Shopline — AI Enablement Engineer",
+            time: "Agosto 2025 – actualidad · Clientes de Estados Unidos",
+            problem: "Las tiendas DTC necesitaban automatizar pedidos, inventario, fulfillment y devoluciones, e integrar ERP, 3PL, impuestos, ShipBob, Passport y Redo.",
+            built: "Construí la mayoría de los nodos custom de n8n. Desarrollo los flujos y participo en las pruebas, las iteraciones y el soporte. También escribo PRD, alcance y criterios de aceptación, hago QA del tema contra el diseño aprobado en Figma y definí el flujo de un retainer de mantenimiento. Coordino un squad de front, back y diseño, y participo en el scrum de Norteamérica.",
+            result: "Hay un go-live documentado el 13 de julio de 2026. En un sandbox de logística comprobé que el hold de fulfillment no se puede forzar por API y que la edición de la orden sí; el hallazgo cambió el diseño. Sesiones presenciales el 16 de junio y el 25 de septiembre de 2026. Desde septiembre de 2026 la fuente del tracker es Monday.com."
+          },
+          {
+            title: "USAVIONICS",
+            time: "Noviembre 2025",
+            problem: "Un cliente de Estados Unidos necesitaba una prueba de concepto de flota de drones, con misiones y GPS.",
+            built: "El POC de flota, misiones y GPS.",
+            result: "Quedó la prueba de concepto de flota, misiones y GPS."
+          },
+          {
+            title: "Advanta Connect",
+            time: "Octubre 2025",
+            problem: "Hacía falta un product owner interino para una app de sales enablement y para prototipos de marca blanca.",
+            built: "El alcance como product owner interino y los prototipos de marca blanca.",
+            result: "Quedaron los prototipos de marca blanca de la app de sales enablement."
+          },
+          {
+            title: "POC notarial",
+            time: "Septiembre 2025",
+            problem: "Un cliente de Estados Unidos necesitaba una prueba de concepto notarial con IA.",
+            built: "La prueba de concepto, con IA.",
+            result: "Quedó el POC notarial con IA."
+          },
+          {
+            title: "POC inmobiliario",
+            time: "Agosto 2025",
+            problem: "Un cliente de Estados Unidos necesitaba una prueba de concepto de un inmueble de lujo.",
+            built: "La prueba de concepto del inmueble de lujo.",
+            result: "Quedó el POC del inmueble de lujo."
+          },
+          {
+            title: "Krystal",
+            time: "Julio 2025 – agosto 2025",
+            problem: "Hacía falta una prueba de concepto de atracción de talento con matching.",
+            built: "El POC en React.",
+            result: "Quedó el POC de matching en React."
+          },
+          {
+            title: "Control de accesos facial",
+            time: "Junio 2025 – julio 2025",
+            problem: "Hacía falta una prueba de concepto de control de accesos con reconocimiento facial, usando IA.",
+            built: "El front en React y las funciones de Supabase.",
+            result: "Quedó el POC con IA, en React y Supabase."
+          },
+          {
+            title: "Delivery",
+            time: "Abril 2025 – junio 2025",
+            problem: "El módulo de delivery necesitaba KPIs, y el repositorio en Bitbucket había que estabilizarlo.",
+            built: "KPIs de Jira, GitHub y Bitbucket, un dashboard financiero y un sistema de 4 módulos. El 30 de abril de 2025 trabajé backlog, blockers, QA y el repositorio en Bitbucket.",
+            result: "El 30 de abril de 2025 quedó trabajada la estabilización del repositorio, el backlog, los blockers y el QA. El sistema que se puede nombrar tiene 4 módulos."
+          },
+          {
+            title: "Mosaic",
+            time: "Marzo 2024 – abril 2025",
+            problem: "Finanzas necesitaba sacar datos a hojas de cálculo y a otros sistemas.",
+            built: "La exportación a Google Sheets, un add-on y conectores ETL hacia BigQuery, Redshift, Xero, Snowflake y Sage Intacct.",
+            result: "Quedaron la exportación, el add-on y esos conectores."
+          },
+          {
+            title: "Drata",
+            time: "Noviembre 2022 – enero 2024",
+            problem: "Un producto de cumplimiento necesitaba product owner y scrum master en la entrega.",
+            built: "La gestión de producto y de scrum, con las liberaciones y la capacitación.",
+            result: "Más de 10 liberaciones y capacitación de más de 20 personas."
+          },
+          {
+            title: "WellFit",
+            time: "Dentro de ArkusNexus",
+            problem: "Clínicas dentales necesitaban un front para usuarios, roles, expedientes y pagos.",
+            built: "Ese front.",
+            result: "El uso que se puede citar es de más de 500 transacciones al mes."
+          },
+          {
+            title: "Wellness",
+            time: "Dentro de ArkusNexus",
+            problem: "El producto necesitaba voz, lectura de documentos clínicos y planes de alimentación.",
+            built: "Voz, OCR clínico y planes de alimentación con IA.",
+            result: "Quedaron la voz, el OCR clínico y los planes de alimentación con IA."
+          },
+          {
+            title: "OCR de credencial para votar (INE)",
+            time: "Dentro de ArkusNexus",
+            problem: "Había que leer la credencial para votar.",
+            built: "El trabajo de product owner de un equipo de 5 a 7 personas.",
+            result: "El equipo a cargo fue de 5 a 7 personas."
+          }
+        ]
+      },
+      {
+        name: "SOFOM, México",
+        role: "Freelance",
+        time: "Junio 2026 – actualidad",
+        place: "Remoto",
+        note: "En paralelo a ArkusNexus. Desde junio de 2026 construyo solo y con IA todo el producto, desde el diseño.",
+        problem: "Una SOFOM en México necesitaba su producto de gestión de crédito, desde el diseño.",
+        built: "Todo el producto, solo y con IA. SaaS multi-tenant de marca blanca. Aplicación y API de originación, mesa de control, prevención de lavado, productos y catálogos, cartera y tabla de amortización, cierre diario, tesorería con dispersión SPEI, cobranza, pólizas contables, e instituciones, usuarios, roles y marca. Stack: Next.js, React, TypeScript, Tailwind CSS, Supabase y n8n.",
+        result: "Sigue en construcción, con cierre estimado en diciembre de 2026."
+      },
+      {
+        name: "Coru (Compara Gurú)",
+        role: "Ingeniero de producto",
+        time: "Mayo 2022 – junio 2022",
+        place: "Ciudad de México",
+        problem: "La plataforma de educación financiera (crédito, tarjetas, ahorro, inversiones, afore y pyme) necesitaba historias, prioridad y prototipos.",
+        built: "Historias de usuario, priorización, criterios de aceptación y prototipos. Herramientas: Google Workspace, Trello, Slack, analytics, MongoDB y MySQL.",
+        result: "El perfil registra 4 KPI."
+      },
+      {
+        name: "Finasist",
+        role: "Product owner, líder de proyecto y desarrollador .NET",
+        time: "Agosto 2015 – mayo 2022",
+        place: "Ciudad de México",
+        problem: "Los sistemas de crédito necesitaban desarrollo, liderazgo de proyecto y luego producto.",
+        built: "Desarrollo .NET de 2015 a 2017, liderazgo de proyecto de 2017 a 2019 y product owner de 2019 a 2022. En el código: ASP.NET MVC, Bootstrap, jQuery, Ajax y SQL Server. También un robot de pruebas.",
+        result: "Más de 5 sistemas y un robot de pruebas."
+      },
+      {
+        name: "Catarsyslab / Grupo Solertia",
+        role: "Desarrollador .NET y front-end",
+        time: "Agosto 2013 – agosto 2015",
+        place: "Ciudad de México",
+        problem: "Aramark, Broxel y Ficrea necesitaban sistemas a medida de accesos, estados de cuenta e intranets.",
+        built: "Desarrollo .NET y front-end: ASP.NET, C#, SQL, HTML, CSS, JavaScript, jQuery y Umbraco.",
+        result: "Esos sistemas quedaron para Aramark, Broxel y Ficrea."
+      }
+    ],
+    skillsTitle: "Habilidades",
+    skillsSubtitle: "Filtra por tipo. No hay niveles inventados. En Azure (AKS, Argo CD, Azure Container Registry, Front Door y Helm) el equipo opera la plataforma; yo participo en las revisiones de despliegue.",
+    toolsTitle: "Herramientas y tecnologías",
+    filters: [
+      { id: "all", label: "Todas" },
+      { id: "dev", label: "Desarrollo" },
+      { id: "db", label: "Bases de datos" },
+      { id: "mgmt", label: "Management" },
+      { id: "design", label: "Diseño" },
+      { id: "ia", label: "IA" }
+    ],
+    skills: [
+      ["Next.js", "dev"], ["React", "dev"], ["TypeScript", "dev"], ["Tailwind CSS", "dev"], ["JavaScript", "dev"],
+      ["HTML5", "dev"], ["CSS y CSS3", "dev"], ["JSON", "dev"], ["C#", "dev"], ["ASP.NET", "dev"], ["MVC 5", "dev"],
+      ["jQuery", "dev"], ["Ajax", "dev"], ["Bootstrap", "dev"], ["Umbraco", "dev"], ["Git", "dev"], ["GitHub", "dev"],
+      ["GitHub Actions", "dev"], ["Visual Studio Code", "dev"], ["Chrome DevTools", "dev"], ["Bitbucket", "dev"],
+      ["Shopline", "dev"], ["Handlebars", "dev"], ["Postman", "dev"], ["OpenAPI", "dev"], ["Zod", "dev"],
+      ["Decimal.js", "dev"], ["Docxtemplater", "dev"], ["Google Cloud Platform", "dev"], ["Shopify", "dev"],
+      ["AKS", "dev"], ["Argo CD", "dev"], ["Azure Container Registry", "dev"], ["Front Door", "dev"], ["Helm", "dev"],
+      ["Supabase", "db"], ["PostgreSQL", "db"], ["SQL Server", "db"], ["MySQL", "db"], ["MongoDB", "db"], ["SQL", "db"],
+      ["Jira", "mgmt"], ["Notion", "mgmt"], ["Confluence", "mgmt"], ["Trello", "mgmt"], ["Monday.com", "mgmt"],
+      ["Slack", "mgmt"], ["Basecamp", "mgmt"], ["Google Workspace", "mgmt"], ["Excel", "mgmt"], ["Microsoft Office", "mgmt"],
+      ["Google Analytics", "mgmt"],
+      ["Figma", "design"],
+      ["n8n", "ia"], ["Cursor", "ia"], ["Claude", "ia"], ["ChatGPT", "ia"], ["Gemini", "ia"], ["v0", "ia"], ["Lovable", "ia"], ["Claude Code", "ia"]
+    ],
+    educationTitle: "Educación",
+    degree: "Licenciatura en Informática Administrativa. Cédula 6849641",
+    university: "Tecnológico de Estudios Superiores de Ecatepec (TESE)",
+    period: "Agosto 2005 – octubre 2010",
+    certsTitle: "Certificaciones y cursos",
+    certsSubtitle: "Están todas, también las vencidas y los videos sin diploma. La credencial de product owner es SPOPC de CertiProf. El curso de gerencia PMP no es la certificación del PMI. Si hay diploma, el clic lo abre.",
+    certFilters: [
+      { id: "all", label: "Todas" },
+      { id: "cert", label: "Certificaciones" },
+      { id: "ia", label: "IA" },
+      { id: "agile", label: "Agile" },
+      { id: "dev", label: "Desarrollo" }
+    ],
+    certs: [
+      ["cert", "Agile Coach Professional Certificate (ACPC)", "CertiProf · 20 ene 2024", "acpc-certiprof-2024.pdf"],
+      ["cert", "PeopleCert DevOps Fundamentals", "PeopleCert · 6 abr 2023. Examen aprobado.", "devops-peoplecert-2023.pdf"],
+      ["cert", "Scrum Product Owner Professional Certificate (SPOPC)", "CertiProf · 9 oct 2022", "spopc-certiprof-2022.pdf"],
+      ["cert", "Kanban Essentials Professional Certificate (KEPC)", "CertiProf · 20 feb 2022", "kepc-certiprof-2022.pdf"],
+      ["cert", "Scrum Master Professional Certificate (SMPC)", "CertiProf · 26 abr 2021", "smpc-certiprof-2021.pdf"],
+      ["cert", "Remote Work and Virtual Collaboration (RWVCPC)", "CertiProf · 20 jun 2021. Venció el 20 jun 2023.", "rwvcpc-certiprof-2021.pdf"],
+      ["cert", "Design Thinking Professional Certificate (DTPC)", "CertiProf · 17 oct 2020", "dtpc-certiprof-2020.pdf"],
+      ["cert", "Scrum Master Certified (SMC)", "SCRUMstudy · 21 dic 2018", "smc-scrumstudy-2018.pdf"],
+      ["cert", "Scrum Developer Certified (SDC)", "SCRUMstudy · 24 nov 2017", "sdc-scrumstudy-2017.pdf"],
+      ["cert", "Scrum Fundamentals Certified (SFC)", "SCRUMstudy · 13 jul 2017", "sfc-scrumstudy-2017.pdf"],
+      ["agile", "Management 3.0, taller del 17 al 20 de octubre", "Management 3.0 · facilitador Fernando Jiménez · oct 2022", "management-30-2022.pdf"],
+      ["agile", "Preparación DevOps. Asistencia. No sustituye al certificado de PeopleCert.", "Fernando Jiménez · 23–27 ene 2023", "devops-preparacion-2023.pdf"],
+      ["agile", "Gerencia de proyectos PMP, 45 h. Es un curso, no la certificación del PMI.", "IT Service University · 8–30 may 2023", "pmp-itservice-2023.pdf"],
+      ["agile", "Taller Jira Software Fundamentos, 6 h", "Fernando Jiménez · 19 ago 2023", "jira-fundamentos-2023.pdf"],
+      ["agile", "Gestión de proyectos con Jira, 12 h", "Platzi · 16 jun 2025", "jira-platzi-2025.pdf"],
+      ["ia", "Context engineering, 9 h", "Platzi · 22 oct 2026", "context-engineering-platzi-2026.pdf"],
+      ["ia", "Reto Agent Builders. El diploma no imprime horas.", "Platzi · 22 oct 2026", "agent-builders-platzi-2026.pdf"],
+      ["ia", "Curso de n8n, 10 h", "Platzi · 21 oct 2026", "n8n-platzi-2026.pdf"],
+      ["ia", "Claude Code para no programadores, 9 h", "Platzi · 26 ago 2026", "claude-code-platzi-2026.pdf"],
+      ["ia", "Claude AI, 9 h", "Platzi · 16 abr 2026", "claude-platzi-2026.pdf"],
+      ["ia", "Gemini, 14 h", "Platzi · 25 mar 2026", "gemini-platzi-2026.pdf"],
+      ["ia", "Creación de páginas web con v0, 7 h", "Platzi · 2 mar 2026", "v0-platzi-2026.pdf"],
+      ["ia", "Curso completo de n8n: automatización con IA, 9 h", "G-Talent.net · 11 feb 2026", "n8n-gtalent-2026.pdf"],
+      ["ia", "ChatGPT, 16 h", "Platzi · 2 dic 2025", "chatgpt-platzi-2025.pdf"],
+      ["ia", "Prompt engineering, 13 h", "Platzi · 19 nov 2025", "prompt-platzi-2025.pdf"],
+      ["ia", "Lovable para crear páginas web sin programar, 10 h", "Platzi · 11 nov 2025", "lovable-platzi-2025.pdf"],
+      ["ia", "Cursor AI Code Editor, 11 h", "Platzi · 28 ago 2025", "cursor-platzi-2025.pdf"],
+      ["ia", "Curso de n8n, 9 h", "Platzi · 11 jul 2025", "n8n-platzi-2025.pdf"],
+      ["ia", "Introducción a la inteligencia artificial, 4 h", "Platzi · 9 abr 2025", "ia-intro-platzi-2025.pdf"],
+      ["dev", "Debugging con Chrome DevTools, 18 h", "Platzi · 23 ago 2026", "devtools-platzi-2026.pdf"],
+      ["dev", "Supabase avanzado, 16 h", "Platzi · 25 jul 2026", "supabase-avanzado-platzi-2026.pdf"],
+      ["dev", "Supabase, 10 h", "Platzi · 21 may 2026", "supabase-platzi-2026.pdf"],
+      ["dev", "Programación básica, 29 h", "Platzi · 30 sep 2025", "programacion-basica-platzi-2025.pdf"],
+      ["dev", "Git y GitHub, 24 h", "Platzi · 31 oct 2025", "git-platzi-2025.pdf"],
+      ["dev", "Introducción a Google Cloud Platform, 8 h", "Google Cloud y Platzi · 15 jul 2025", "gcp-platzi-2025.pdf"],
+      ["dev", "Fundamentos de ingeniería de software, 14 h", "Platzi · 5 jul 2025", "ingenieria-platzi-2025.pdf"],
+      ["dev", "Visual Studio Code", "DevTalles (Fernando Herrera) · 7 jul 2025", "vscode-devtalles-2025.pdf"],
+      ["dev", "Master en Código. Participación, no egreso. HTML, CSS, JavaScript y React.", "DEV.F · inicio 20 nov 2023 · carta 20 ene 2025", "master-codigo-devf.pdf"],
+      ["other", "Curso de Notion, 19 h", "Platzi · 19 sep 2026", "notion-platzi-2026.pdf"],
+      ["other", "Identificar y vencer el síndrome del impostor en el trabajo, 7 h", "Platzi · 12 jul 2026", "impostor-platzi-2026.pdf"],
+      ["other", "Curso para ser CEO, 13 h", "Platzi · 4 jun 2026", "ceo-platzi-2026.pdf"],
+      ["other", "Sistemas de diseño con Figma, 12 h", "Platzi · 24 feb 2026", "figma-sistemas-platzi-2026.pdf"],
+      ["other", "Figma: técnicas avanzadas de diseño, 21 h", "Platzi y Torresburriel Estudio · 4 feb 2026", "figma-avanzado-platzi-2026.pdf"],
+      ["other", "Figma, 12 h", "Platzi · 16 ene 2026", "figma-platzi-2026.pdf"],
+      ["other", "Fundamentos de diseño de interfaces UX/UI, 15 h", "Platzi y Torresburriel Estudio · 10 dic 2025", "uxui-platzi-2025.pdf"],
+      ["other", "Inglés intermedio alto B2: Assumptions and Instructions, 16 h", "Platzi · 8 ago 2025", "ingles-b2-platzi-2025.pdf"],
+      ["other", "Comunicación efectiva para equipos de trabajo, 8 h", "Platzi · 19 jun 2025", "comunicacion-platzi-2025.pdf"],
+      ["other", "Strategies to Learn English Online, 11 h", "Platzi · 17 abr 2025", "ingles-estrategias-platzi-2025.pdf"],
+      ["other", "Platzi Conf CDMX 2026, asistencia presencial, 7 h", "Platzi · 16 may 2026. El archivo de la carpeta es un boleto, no un diploma.", ""],
+      ["other", "Gerencia de la transformación empresarial. Asistencia.", "Preparly · 11 y 25 nov, 2 y 9 dic 2023. El documento trae 7 dic 2023.", "preparly-transformacion-2023.png"],
+      ["ia", "Ética y manejo de datos para data science e inteligencia artificial", "Platzi. Video de clase. Sin diploma y sin horas. No es una certificación. La marca del archivo es 12 may 2023.", ""],
+      ["ia", "Cómo y por qué aprender data science e inteligencia artificial", "Platzi. Video de clase. Sin diploma y sin horas. No es una certificación. La marca del archivo es 12 may 2023.", ""],
+      ["ia", "Generación de imágenes con IA: Dall-E, Midjourney y Stable Diffusion", "Platzi. Video de clase. Sin diploma y sin horas. No es una certificación. La marca del archivo es 19 jun 2023.", ""],
+      ["ia", "Taller de creación de contenido con inteligencia artificial", "Platzi. Video de clase. Sin diploma y sin horas. No es una certificación. La marca del archivo es 19 jun 2023.", ""],
+      ["ia", "Inglés para el uso de herramientas de inteligencia artificial", "Platzi. Video de clase. Sin diploma y sin horas. No es una certificación. La marca del archivo es 25 jun 2023. No es el curso de inglés B2 ni Strategies to Learn English.", ""],
+      ["ia", "Inteligencia artificial para marketing y contenidos", "Platzi. Video de clase. Sin diploma y sin horas. No es una certificación. La marca del archivo es 11 jul 2023.", ""],
+      ["ia", "Inteligencia artificial para finanzas", "Platzi. Video de clase. Sin diploma y sin horas. No es una certificación. La marca del archivo es 11 jul 2023.", ""],
+      ["ia", "Inteligencia artificial para content marketing", "Platzi. Video de clase. Sin fecha de diploma, sin diploma y sin horas. No es una certificación.", ""],
+      ["ia", "Inteligencia artificial para product discovery y product design", "Platzi. Video de clase. Sin fecha de diploma, sin diploma y sin horas. No es una certificación.", ""],
+      ["ia", "ChatGPT para product designers", "Platzi. Video de clase. Sin fecha de diploma, sin diploma y sin horas. No es una certificación. No es el curso de ChatGPT de diciembre 2025.", ""],
+      ["ia", "Diseño ético para el desarrollo de productos digitales con IA", "Platzi. Video de clase. Sin fecha de diploma, sin diploma y sin horas. No es una certificación.", ""],
+      ["agile", "Curso de certificación Scrum Master Bridge, actualización Scrum Guide 2020", "Aparece en LinkedIn. El export no trae emisor ni fecha. Sin diploma.", ""],
+      ["agile", "Project Management en español del PMBOK V5. Es un curso, no una certificación del PMI.", "Aparece en LinkedIn. El export no trae emisor ni fecha. Sin diploma.", ""],
+      ["agile", "DevOps para manager", "Aparece en LinkedIn. El export no trae emisor ni fecha. Sin diploma.", ""],
+      ["other", "Curso-Taller: El maestro como educador emocional", "Aparece en LinkedIn. El export no trae emisor ni fecha. Sin diploma.", ""],
+      ["other", "Curso-Taller: EBC… Secuencias didácticas", "Aparece en LinkedIn. El export no trae emisor ni fecha. Sin diploma.", ""],
+      ["other", "Curso de autoformación en Ética Pública", "Aparece en LinkedIn. El export no trae emisor ni fecha. Sin diploma.", ""],
+      ["other", "Master en Inteligencia Emocional y Soft Skills YPD", "Aparece en LinkedIn. El export no trae emisor ni fecha. Sin diploma.", ""],
+      ["other", "Interpreter of the English Language", "Aparece en LinkedIn. El export no trae emisor ni fecha. Sin diploma.", ""]
+    ]
+  },
+  en: {
+    print: "Print CV",
+    pdfLabel: "Two-page CV",
+    pdfHref: "cv/CV-Jonathan-Hernandez-EN.pdf",
+    close: "Close",
+    viewDiploma: "View diploma",
+    role: "AI Enablement Engineer",
+    language: "Native Spanish. English B2+. Duolingo English Test 125, the top of the B2 range. C1 starts at 130.",
+    summaryTitle: "Summary",
+    summary: [
+      "My career in systems began in 2013, as a web programmer on both the front end and the back end. I later took on project leadership and, since 2019, I have worked as a Product Owner and Scrum Master. That work does not stay in management. I go through the full flow: I gather and prioritize requirements, I put the product and the POCs together, and I also develop, test, and automate.",
+      "Today I am at ArkusNexus, since June 2022. Since August 2025 I have been assigned to Shopline, where I built most of the custom n8n nodes, I develop the flows, and I take part in the tests, the iterations, and the support. In parallel, since June 2026, I build the entire product of a SOFOM in Mexico on my own and with AI, from the design. The other accounts are in the United States.",
+      "As a Scrum Master I look after schedules, impediments, and the team’s flow. As a Product Owner I align the product with the business and the client. Organization and problem-solving continue day to day, now also in the code and in the automations."
+    ],
+    nav: ["Profile", "Experience", "Skills", "Education", "Certifications"],
+    caseLabels: { problem: "Problem.", built: "Built.", result: "Result." },
+    experienceTitle: "Experience",
+    jobs: [
+      {
+        name: "ArkusNexus (Grupo Mind)",
+        role: "Product Owner and Scrum Master",
+        time: "June 2022 – present",
+        place: "Tijuana, Baja California",
+        note: "This is the job, since June 2022. The accounts below are assignments, each with its own dates. Shopline is not the whole job. The work includes development and the use of AI, along with Scrum Master and product work.",
+        problem: "The accounts need someone to look after schedules and impediments, align the product with the business, and also build.",
+        built: "INVEST requirements, cycle coordination, and a report on each release. Development covers the nodes, flows, tests, and automations in each assignment. Tools for this role: Jira, Confluence, Slack, Google Workspace, and Basecamp.",
+        result: "The setting for the role is a program of 5 projects with a Scrum team, a core Kanban team, and a UI/UX Kanban team.",
+        accounts: [
+          {
+            open: true,
+            title: "Shopline — AI Enablement Engineer",
+            time: "August 2025 – present · Clients in the United States",
+            problem: "DTC stores needed orders, inventory, fulfillment, and returns automated, and ERP, 3PL, tax, ShipBob, Passport, and Redo connected.",
+            built: "I built most of the custom n8n nodes. I develop the flows and take part in the tests, the iterations, and the support. I also write PRDs, scope, and acceptance criteria, QA the theme against the approved Figma design, and defined a maintenance-retainer flow. I coordinate a squad of front end, back end, and design, and I take part in the North America scrum.",
+            result: "There is a documented go-live on July 13, 2026. In a logistics sandbox I confirmed that a fulfillment hold cannot be forced through the API and that order editing can; the finding changed the design. In-person sessions on June 16 and September 25, 2026. Monday.com has been the tracker source since September 2026."
+          },
+          {
+            title: "USAVIONICS",
+            time: "November 2025",
+            problem: "A client in the United States needed a proof of concept for a drone fleet, with missions and GPS.",
+            built: "The fleet, missions, and GPS POC.",
+            result: "The proof of concept for fleet, missions, and GPS."
+          },
+          {
+            title: "Advanta Connect",
+            time: "October 2025",
+            problem: "A sales-enablement app and white-label prototypes needed an interim product owner.",
+            built: "The scope as interim product owner, and the white-label prototypes.",
+            result: "The white-label prototypes for the sales-enablement app."
+          },
+          {
+            title: "Notary POC",
+            time: "September 2025",
+            problem: "A client in the United States needed a notary proof of concept with AI.",
+            built: "The proof of concept, with AI.",
+            result: "The notary POC with AI."
+          },
+          {
+            title: "Real-estate POC",
+            time: "August 2025",
+            problem: "A client in the United States needed a proof of concept for a luxury property.",
+            built: "The luxury-property proof of concept.",
+            result: "The luxury-property POC."
+          },
+          {
+            title: "Krystal",
+            time: "July 2025 – August 2025",
+            problem: "A talent-attraction proof of concept with matching was needed.",
+            built: "The POC in React.",
+            result: "The matching POC in React."
+          },
+          {
+            title: "Facial access control",
+            time: "June 2025 – July 2025",
+            problem: "An access-control proof of concept with facial recognition, using AI, was needed.",
+            built: "The React front end and the Supabase functions.",
+            result: "The AI POC, in React and Supabase."
+          },
+          {
+            title: "Delivery",
+            time: "April 2025 – June 2025",
+            problem: "The delivery module needed KPIs, and the Bitbucket repository needed stabilizing.",
+            built: "KPIs from Jira, GitHub, and Bitbucket, a financial dashboard, and a 4-module system. On April 30, 2025 I worked the backlog, blockers, QA, and the Bitbucket repository.",
+            result: "On April 30, 2025 the repository stabilization, the backlog, the blockers, and the QA were worked. The system that can be named has 4 modules."
+          },
+          {
+            title: "Mosaic",
+            time: "March 2024 – April 2025",
+            problem: "Finance needed data in spreadsheets and in other systems.",
+            built: "The export to Google Sheets, an add-on, and ETL connectors to BigQuery, Redshift, Xero, Snowflake, and Sage Intacct.",
+            result: "The export, the add-on, and those connectors."
+          },
+          {
+            title: "Drata",
+            time: "November 2022 – January 2024",
+            problem: "A compliance product needed a product owner and a scrum master on delivery.",
+            built: "Product and scrum management, with the releases and the training.",
+            result: "More than 10 releases and training for more than 20 people."
+          },
+          {
+            title: "WellFit",
+            time: "Inside ArkusNexus",
+            problem: "Dental clinics needed a front end for users, roles, records, and payments.",
+            built: "That front end.",
+            result: "The usage that can be cited is more than 500 transactions a month."
+          },
+          {
+            title: "Wellness",
+            time: "Inside ArkusNexus",
+            problem: "The product needed voice, reading of clinical documents, and meal plans.",
+            built: "Voice, clinical OCR, and AI meal plans.",
+            result: "Voice, clinical OCR, and AI meal plans."
+          },
+          {
+            title: "Voter-ID (INE) OCR",
+            time: "Inside ArkusNexus",
+            problem: "The voter credential had to be read.",
+            built: "The product-owner work for a team of 5 to 7 people.",
+            result: "The team in charge was 5 to 7 people."
+          }
+        ]
+      },
+      {
+        name: "SOFOM, Mexico",
+        role: "Freelance",
+        time: "June 2026 – present",
+        place: "Remote",
+        note: "In parallel with ArkusNexus. Since June 2026 I have been building the entire product on my own and with AI, from the design.",
+        problem: "A SOFOM in Mexico needed its credit-management product, from the design.",
+        built: "The entire product, alone and with AI. White-label multi-tenant SaaS. Application and API for origination, control desk, anti-money-laundering checks, credit products and catalogs, portfolio and amortization schedule, daily close, treasury with SPEI disbursements, collections, accounting entries, plus institutions, users, roles, and brand. Stack: Next.js, React, TypeScript, Tailwind CSS, Supabase, and n8n.",
+        result: "Still in progress, with an estimated close in December 2026."
+      },
+      {
+        name: "Coru (Compara Gurú)",
+        role: "Product Engineer",
+        time: "May 2022 – June 2022",
+        place: "Mexico City",
+        problem: "The financial-education platform (credit, cards, savings, investments, retirement funds, and small business) needed stories, priority, and prototypes.",
+        built: "User stories, prioritization, acceptance criteria, and prototypes. Tools: Google Workspace, Trello, Slack, analytics, MongoDB, and MySQL.",
+        result: "The profile records 4 KPIs."
+      },
+      {
+        name: "Finasist",
+        role: "Product owner, project leader, and .NET developer",
+        time: "August 2015 – May 2022",
+        place: "Mexico City",
+        problem: "The credit systems needed development, project leadership, and then product ownership.",
+        built: ".NET development from 2015 to 2017, project leadership from 2017 to 2019, and product owner from 2019 to 2022. In the code: ASP.NET MVC, Bootstrap, jQuery, Ajax, and SQL Server. Also a test robot.",
+        result: "More than 5 systems and a test robot."
+      },
+      {
+        name: "Catarsyslab / Grupo Solertia",
+        role: ".NET and front-end developer",
+        time: "August 2013 – August 2015",
+        place: "Mexico City",
+        problem: "Aramark, Broxel, and Ficrea needed custom systems for access control, account statements, and intranets.",
+        built: ".NET and front-end development: ASP.NET, C#, SQL, HTML, CSS, JavaScript, jQuery, and Umbraco.",
+        result: "Those systems for Aramark, Broxel, and Ficrea."
+      }
+    ],
+    skillsTitle: "Skills",
+    skillsSubtitle: "Filter by type. There are no invented levels. On Azure (AKS, Argo CD, Azure Container Registry, Front Door, and Helm) the team operates the platform; I take part in the deployment reviews.",
+    toolsTitle: "Tools and technologies",
+    filters: [
+      { id: "all", label: "All" },
+      { id: "dev", label: "Development" },
+      { id: "db", label: "Databases" },
+      { id: "mgmt", label: "Management" },
+      { id: "design", label: "Design" },
+      { id: "ia", label: "AI" }
+    ],
+    skills: [
+      ["Next.js", "dev"], ["React", "dev"], ["TypeScript", "dev"], ["Tailwind CSS", "dev"], ["JavaScript", "dev"],
+      ["HTML5", "dev"], ["CSS and CSS3", "dev"], ["JSON", "dev"], ["C#", "dev"], ["ASP.NET", "dev"], ["MVC 5", "dev"],
+      ["jQuery", "dev"], ["Ajax", "dev"], ["Bootstrap", "dev"], ["Umbraco", "dev"], ["Git", "dev"], ["GitHub", "dev"],
+      ["GitHub Actions", "dev"], ["Visual Studio Code", "dev"], ["Chrome DevTools", "dev"], ["Bitbucket", "dev"],
+      ["Shopline", "dev"], ["Handlebars", "dev"], ["Postman", "dev"], ["OpenAPI", "dev"], ["Zod", "dev"],
+      ["Decimal.js", "dev"], ["Docxtemplater", "dev"], ["Google Cloud Platform", "dev"], ["Shopify", "dev"],
+      ["AKS", "dev"], ["Argo CD", "dev"], ["Azure Container Registry", "dev"], ["Front Door", "dev"], ["Helm", "dev"],
+      ["Supabase", "db"], ["PostgreSQL", "db"], ["SQL Server", "db"], ["MySQL", "db"], ["MongoDB", "db"], ["SQL", "db"],
+      ["Jira", "mgmt"], ["Notion", "mgmt"], ["Confluence", "mgmt"], ["Trello", "mgmt"], ["Monday.com", "mgmt"],
+      ["Slack", "mgmt"], ["Basecamp", "mgmt"], ["Google Workspace", "mgmt"], ["Excel", "mgmt"], ["Microsoft Office", "mgmt"],
+      ["Google Analytics", "mgmt"],
+      ["Figma", "design"],
+      ["n8n", "ia"], ["Cursor", "ia"], ["Claude", "ia"], ["ChatGPT", "ia"], ["Gemini", "ia"], ["v0", "ia"], ["Lovable", "ia"], ["Claude Code", "ia"]
+    ],
+    educationTitle: "Education",
+    degree: "Bachelor’s degree in Administrative Informatics. License 6849641",
+    university: "Tecnológico de Estudios Superiores de Ecatepec (TESE)",
+    period: "August 2005 – October 2010",
+    certsTitle: "Certifications and courses",
+    certsSubtitle: "All of them are listed, including expired credentials and class videos without a diploma. The product-owner credential is SPOPC from CertiProf. The PMP project-management course is not the PMI certification. If a diploma exists, a click opens it.",
+    certFilters: [
+      { id: "all", label: "All" },
+      { id: "cert", label: "Certifications" },
+      { id: "ia", label: "AI" },
+      { id: "agile", label: "Agile" },
+      { id: "dev", label: "Development" }
+    ],
+    certs: [
+      ["cert", "Agile Coach Professional Certificate (ACPC)", "CertiProf · January 20, 2024", "acpc-certiprof-2024.pdf"],
+      ["cert", "PeopleCert DevOps Fundamentals", "PeopleCert · April 6, 2023. Exam passed.", "devops-peoplecert-2023.pdf"],
+      ["cert", "Scrum Product Owner Professional Certificate (SPOPC)", "CertiProf · October 9, 2022", "spopc-certiprof-2022.pdf"],
+      ["cert", "Kanban Essentials Professional Certificate (KEPC)", "CertiProf · February 20, 2022", "kepc-certiprof-2022.pdf"],
+      ["cert", "Scrum Master Professional Certificate (SMPC)", "CertiProf · April 26, 2021", "smpc-certiprof-2021.pdf"],
+      ["cert", "Remote Work and Virtual Collaboration (RWVCPC)", "CertiProf · June 20, 2021. Expired June 20, 2023.", "rwvcpc-certiprof-2021.pdf"],
+      ["cert", "Design Thinking Professional Certificate (DTPC)", "CertiProf · October 17, 2020", "dtpc-certiprof-2020.pdf"],
+      ["cert", "Scrum Master Certified (SMC)", "SCRUMstudy · December 21, 2018", "smc-scrumstudy-2018.pdf"],
+      ["cert", "Scrum Developer Certified (SDC)", "SCRUMstudy · November 24, 2017", "sdc-scrumstudy-2017.pdf"],
+      ["cert", "Scrum Fundamentals Certified (SFC)", "SCRUMstudy · July 13, 2017", "sfc-scrumstudy-2017.pdf"],
+      ["agile", "Management 3.0, workshop from October 17 to 20", "Management 3.0 · facilitator Fernando Jiménez · October 2022", "management-30-2022.pdf"],
+      ["agile", "DevOps preparation. Attendance. It does not replace the PeopleCert certificate.", "Fernando Jiménez · January 23–27, 2023", "devops-preparacion-2023.pdf"],
+      ["agile", "PMP project management, 45 hours. A course, not the PMI certification.", "IT Service University · May 8–30, 2023", "pmp-itservice-2023.pdf"],
+      ["agile", "Jira Software fundamentals, 6 hours", "Fernando Jiménez · August 19, 2023", "jira-fundamentos-2023.pdf"],
+      ["agile", "Project management with Jira, 12 hours", "Platzi · June 16, 2025", "jira-platzi-2025.pdf"],
+      ["ia", "Context engineering, 9 hours", "Platzi · October 22, 2026", "context-engineering-platzi-2026.pdf"],
+      ["ia", "Agent Builders challenge. The diploma does not print hours.", "Platzi · October 22, 2026", "agent-builders-platzi-2026.pdf"],
+      ["ia", "n8n course, 10 hours", "Platzi · October 21, 2026", "n8n-platzi-2026.pdf"],
+      ["ia", "Claude Code for non-programmers, 9 hours", "Platzi · August 26, 2026", "claude-code-platzi-2026.pdf"],
+      ["ia", "Claude AI, 9 hours", "Platzi · April 16, 2026", "claude-platzi-2026.pdf"],
+      ["ia", "Gemini, 14 hours", "Platzi · March 25, 2026", "gemini-platzi-2026.pdf"],
+      ["ia", "Building web pages with v0, 7 hours", "Platzi · March 2, 2026", "v0-platzi-2026.pdf"],
+      ["ia", "Complete n8n course: automation with AI, 9 hours", "G-Talent.net · February 11, 2026", "n8n-gtalent-2026.pdf"],
+      ["ia", "ChatGPT, 16 hours", "Platzi · December 2, 2025", "chatgpt-platzi-2025.pdf"],
+      ["ia", "Prompt engineering, 13 hours", "Platzi · November 19, 2025", "prompt-platzi-2025.pdf"],
+      ["ia", "Lovable for building web pages without programming, 10 hours", "Platzi · November 11, 2025", "lovable-platzi-2025.pdf"],
+      ["ia", "Cursor AI Code Editor, 11 hours", "Platzi · August 28, 2025", "cursor-platzi-2025.pdf"],
+      ["ia", "n8n course, 9 hours", "Platzi · July 11, 2025", "n8n-platzi-2025.pdf"],
+      ["ia", "Introduction to artificial intelligence, 4 hours", "Platzi · April 9, 2025", "ia-intro-platzi-2025.pdf"],
+      ["dev", "Debugging with Chrome DevTools, 18 hours", "Platzi · August 23, 2026", "devtools-platzi-2026.pdf"],
+      ["dev", "Advanced Supabase, 16 hours", "Platzi · July 25, 2026", "supabase-avanzado-platzi-2026.pdf"],
+      ["dev", "Supabase, 10 hours", "Platzi · May 21, 2026", "supabase-platzi-2026.pdf"],
+      ["dev", "Basic programming, 29 hours", "Platzi · September 30, 2025", "programacion-basica-platzi-2025.pdf"],
+      ["dev", "Git and GitHub, 24 hours", "Platzi · October 31, 2025", "git-platzi-2025.pdf"],
+      ["dev", "Introduction to Google Cloud Platform, 8 hours", "Google Cloud and Platzi · July 15, 2025", "gcp-platzi-2025.pdf"],
+      ["dev", "Software engineering fundamentals, 14 hours", "Platzi · July 5, 2025", "ingenieria-platzi-2025.pdf"],
+      ["dev", "Visual Studio Code", "DevTalles (Fernando Herrera) · July 7, 2025", "vscode-devtalles-2025.pdf"],
+      ["dev", "Master en Código. Participation, not a degree. HTML, CSS, JavaScript, and React.", "DEV.F · started November 20, 2023 · letter January 20, 2025", "master-codigo-devf.pdf"],
+      ["other", "Notion, 19 hours", "Platzi · September 19, 2026", "notion-platzi-2026.pdf"],
+      ["other", "Identifying and overcoming impostor syndrome at work, 7 hours", "Platzi · July 12, 2026", "impostor-platzi-2026.pdf"],
+      ["other", "Course on becoming a CEO, 13 hours", "Platzi · June 4, 2026", "ceo-platzi-2026.pdf"],
+      ["other", "Design systems with Figma, 12 hours", "Platzi · February 24, 2026", "figma-sistemas-platzi-2026.pdf"],
+      ["other", "Figma: advanced design techniques, 21 hours", "Platzi and Torresburriel Estudio · February 4, 2026", "figma-avanzado-platzi-2026.pdf"],
+      ["other", "Figma, 12 hours", "Platzi · January 16, 2026", "figma-platzi-2026.pdf"],
+      ["other", "UX/UI interface design fundamentals, 15 hours", "Platzi and Torresburriel Estudio · December 10, 2025", "uxui-platzi-2025.pdf"],
+      ["other", "Upper-intermediate English B2: Assumptions and Instructions, 16 hours", "Platzi · August 8, 2025", "ingles-b2-platzi-2025.pdf"],
+      ["other", "Effective communication for work teams, 8 hours", "Platzi · June 19, 2025", "comunicacion-platzi-2025.pdf"],
+      ["other", "Strategies to Learn English Online, 11 hours", "Platzi · April 17, 2025", "ingles-estrategias-platzi-2025.pdf"],
+      ["other", "Platzi Conf Mexico City 2026, in-person attendance, 7 hours", "Platzi · May 16, 2026. The file in the folder is a ticket, not a diploma.", ""],
+      ["other", "Business transformation management. Attendance.", "Preparly · November 11 and 25, December 2 and 9, 2023. The document shows December 7, 2023.", "preparly-transformacion-2023.png"],
+      ["ia", "Ethics and data handling for data science and artificial intelligence", "Platzi. Class video. No diploma and no hours. Not a certification. The file stamp is May 12, 2023.", ""],
+      ["ia", "How and why to learn data science and artificial intelligence", "Platzi. Class video. No diploma and no hours. Not a certification. The file stamp is May 12, 2023.", ""],
+      ["ia", "Image generation with AI: Dall-E, Midjourney, and Stable Diffusion", "Platzi. Class video. No diploma and no hours. Not a certification. The file stamp is June 19, 2023.", ""],
+      ["ia", "Workshop on creating content with artificial intelligence", "Platzi. Class video. No diploma and no hours. Not a certification. The file stamp is June 19, 2023.", ""],
+      ["ia", "English for using artificial-intelligence tools", "Platzi. Class video. No diploma and no hours. Not a certification. The file stamp is June 25, 2023. It is neither the B2 English course nor Strategies to Learn English.", ""],
+      ["ia", "Artificial intelligence for marketing and content", "Platzi. Class video. No diploma and no hours. Not a certification. The file stamp is July 11, 2023.", ""],
+      ["ia", "Artificial intelligence for finance", "Platzi. Class video. No diploma and no hours. Not a certification. The file stamp is July 11, 2023.", ""],
+      ["ia", "Artificial intelligence for content marketing", "Platzi. Class video. No diploma date, no diploma, and no hours. Not a certification.", ""],
+      ["ia", "Artificial intelligence for product discovery and product design", "Platzi. Class video. No diploma date, no diploma, and no hours. Not a certification.", ""],
+      ["ia", "ChatGPT for product designers", "Platzi. Class video. No diploma date, no diploma, and no hours. Not a certification. It is not the December 2025 ChatGPT course.", ""],
+      ["ia", "Ethical design for digital products with AI", "Platzi. Class video. No diploma date, no diploma, and no hours. Not a certification.", ""],
+      ["agile", "Scrum Master Bridge certification course, Scrum Guide 2020 update", "Listed on LinkedIn. The export has no issuer or date. No diploma.", ""],
+      ["agile", "Project Management in Spanish for PMBOK V5. A course, not a PMI certification.", "Listed on LinkedIn. The export has no issuer or date. No diploma.", ""],
+      ["agile", "DevOps for managers", "Listed on LinkedIn. The export has no issuer or date. No diploma.", ""],
+      ["other", "Workshop: The teacher as an emotional educator", "Listed on LinkedIn. The export has no issuer or date. No diploma.", ""],
+      ["other", "Workshop: EBC… instructional sequences", "Listed on LinkedIn. The export has no issuer or date. No diploma.", ""],
+      ["other", "Self-study course in public ethics", "Listed on LinkedIn. The export has no issuer or date. No diploma.", ""],
+      ["other", "Master’s in emotional intelligence and soft skills, YPD", "Listed on LinkedIn. The export has no issuer or date. No diploma.", ""],
+      ["other", "Interpreter of the English Language", "Listed on LinkedIn. The export has no issuer or date. No diploma.", ""]
+    ]
+  }
+};
+
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text) node.textContent = text;
+  return node;
+}
+
+function caseBlock(item, labels) {
+  const box = el("div", "mt-3 space-y-2 text-slate-600");
+  [["problem", labels.problem], ["built", labels.built], ["result", labels.result]].forEach(([key, label]) => {
+    if (!item[key]) return;
+    const p = el("p", "");
+    p.appendChild(el("span", "font-semibold text-slate-800", label + " "));
+    p.appendChild(document.createTextNode(item[key]));
+    box.appendChild(p);
+  });
+  return box;
+}
+
+function renderExperience(data) {
+  const root = document.getElementById("experience-timeline");
+  root.innerHTML = "";
+  data.jobs.forEach((job) => {
+    const article = el("article", "timeline-item relative");
+    article.appendChild(el("h3", "text-2xl font-bold text-slate-800", job.name));
+    article.appendChild(el("p", "font-semibold text-sky-600", job.role));
+    article.appendChild(el("p", "text-sm font-semibold text-slate-700", job.time + (job.place ? " · " + job.place : "")));
+    if (job.note) article.appendChild(el("p", "mt-2 text-slate-600", job.note));
+    if (job.problem) article.appendChild(caseBlock(job, data.caseLabels));
+    if (job.accounts) {
+      const wrap = el("div", "mt-4 space-y-3");
+      job.accounts.forEach((account) => {
+        const card = el("div", "bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:border-sky-300 transition-colors duration-200");
+        const btn = el("button", "assign-toggle w-full text-left px-4 py-3 flex items-start gap-3 hover:bg-sky-50 transition-colors duration-200");
+        btn.type = "button";
+        btn.setAttribute("aria-expanded", account.open ? "true" : "false");
+        const chev = el("span", "chev mt-1 text-sky-600" + (account.open ? " open" : ""), "▸");
+        const label = el("span", "");
+        label.appendChild(el("span", "block font-bold text-slate-800", account.title));
+        label.appendChild(el("span", "block text-sm text-slate-500", account.time));
+        btn.appendChild(chev);
+        btn.appendChild(label);
+        const body = el("div", "assign-body px-4 pb-4" + (account.open ? " open" : ""));
+        body.appendChild(caseBlock(account, data.caseLabels));
+        btn.addEventListener("click", () => {
+          const open = body.classList.toggle("open");
+          chev.classList.toggle("open", open);
+          btn.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+        card.appendChild(btn);
+        card.appendChild(body);
+        wrap.appendChild(card);
       });
-      document.getElementById("btn-es").setAttribute("aria-pressed", next === "es" ? "true" : "false");
-      document.getElementById("btn-en").setAttribute("aria-pressed", next === "en" ? "true" : "false");
+      article.appendChild(wrap);
     }
-    document.getElementById("btn-es").addEventListener("click", function () { setLang("es"); });
-    document.getElementById("btn-en").addEventListener("click", function () { setLang("en"); });
-    document.querySelectorAll("nav a[data-jump]").forEach(function (link) {
-      link.addEventListener("click", function (event) {
-        var target = document.querySelector('.lang:not([hidden]) [data-section="' + link.getAttribute("data-jump") + '"]');
-        if (!target) return;
-        event.preventDefault();
-        target.scrollIntoView();
-      });
+    root.appendChild(article);
+  });
+}
+
+function paintFilter(button, active) {
+  button.className = "px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 " +
+    (active ? "bg-sky-600 text-white" : "bg-slate-200 text-slate-700 hover:bg-sky-50 hover:text-sky-700");
+}
+
+function renderSkills(data) {
+  const bar = document.getElementById("skills-filter-buttons");
+  bar.innerHTML = "";
+  data.filters.forEach((filter) => {
+    const button = el("button", "", filter.label);
+    button.type = "button";
+    button.dataset.filter = filter.id;
+    paintFilter(button, filter.id === skillFilter);
+    button.addEventListener("click", () => {
+      skillFilter = filter.id;
+      renderSkills(content[currentLang]);
     });
-    var initial = new URLSearchParams(location.search).get("lang");
-    setLang(initial === "en" ? "en" : "es");
-  </script>
+    bar.appendChild(button);
+  });
+  const grid = document.getElementById("skills-grid");
+  grid.innerHTML = "";
+  data.skills.forEach(([name, category]) => {
+    if (skillFilter !== "all" && category !== skillFilter) return;
+    grid.appendChild(el("div", "skill-card bg-slate-50 hover:bg-white p-3 rounded-lg text-center shadow-sm border border-slate-100 hover:shadow-md", name));
+  });
+}
+
+function openDiploma(title, file) {
+  const modal = document.getElementById("diploma-modal");
+  const body = document.getElementById("diploma-body");
+  document.getElementById("diploma-title").textContent = title;
+  body.innerHTML = "";
+  const lower = file.toLowerCase();
+  if (lower.endsWith(".png") || lower.endsWith(".jpg") || lower.endsWith(".jpeg") || lower.endsWith(".webp")) {
+    const img = document.createElement("img");
+    img.src = "certificados/" + file;
+    img.alt = title;
+    img.className = "w-full h-full object-contain";
+    body.appendChild(img);
+  } else {
+    const frame = document.createElement("iframe");
+    frame.src = "certificados/" + file;
+    frame.title = title;
+    frame.className = "w-full h-full bg-white";
+    body.appendChild(frame);
+  }
+  modal.classList.add("open");
+}
+
+function closeDiploma() {
+  const modal = document.getElementById("diploma-modal");
+  modal.classList.remove("open");
+  document.getElementById("diploma-body").innerHTML = "";
+}
+
+function renderCerts(data) {
+  const bar = document.getElementById("certs-filter-buttons");
+  bar.innerHTML = "";
+  data.certFilters.forEach((filter) => {
+    const button = el("button", "", filter.label);
+    button.type = "button";
+    paintFilter(button, filter.id === certFilter);
+    button.addEventListener("click", () => {
+      certFilter = filter.id;
+      renderCerts(content[currentLang]);
+    });
+    bar.appendChild(button);
+  });
+  const grid = document.getElementById("certs-grid");
+  grid.innerHTML = "";
+  data.certs.filter((item) => certFilter === "all" || item[0] === certFilter).forEach((item) => {
+    const file = item[3];
+    const card = el(file ? "button" : "div", "bg-white p-5 rounded-xl shadow-sm border border-slate-100 text-left " + (file ? "hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer" : ""));
+    if (file) card.type = "button";
+    card.appendChild(el("h3", "font-bold text-slate-800", item[1]));
+    card.appendChild(el("p", "text-sm text-slate-500 mt-1", item[2]));
+    if (file) {
+      card.appendChild(el("p", "text-sm text-sky-700 mt-3 font-semibold", data.viewDiploma));
+      card.addEventListener("click", () => openDiploma(item[1], file));
+    }
+    grid.appendChild(card);
+  });
+}
+
+function updateContent(lang) {
+  const data = content[lang];
+  document.documentElement.lang = lang;
+  document.getElementById("sidebar-role").textContent = data.role;
+  document.getElementById("profile-roles-main").textContent = data.role;
+  document.getElementById("profile-language").textContent = data.language;
+  document.getElementById("profile-summary-title").textContent = data.summaryTitle;
+  const summary = document.getElementById("profile-summary");
+  summary.innerHTML = "";
+  data.summary.forEach((paragraph) => summary.appendChild(el("p", "", paragraph)));
+  document.getElementById("print-cv-button").textContent = data.print;
+  document.getElementById("diploma-close").textContent = data.close;
+  const pdf = document.getElementById("profile-pdf");
+  pdf.textContent = data.pdfLabel;
+  pdf.href = data.pdfHref;
+  ["nav-profile", "nav-experience", "nav-skills", "nav-education", "nav-certs"].forEach((id, i) => {
+    document.getElementById(id).textContent = data.nav[i];
+  });
+  document.getElementById("experience-title").textContent = data.experienceTitle;
+  document.getElementById("skills-title").textContent = data.skillsTitle;
+  document.getElementById("skills-subtitle").textContent = data.skillsSubtitle;
+  document.getElementById("tools-tech-title").textContent = data.toolsTitle;
+  document.getElementById("education-title").textContent = data.educationTitle;
+  document.getElementById("degree-title").textContent = data.degree;
+  document.getElementById("university").textContent = data.university;
+  document.getElementById("education-period").textContent = data.period;
+  document.getElementById("certs-title").textContent = data.certsTitle;
+  document.getElementById("certs-subtitle").textContent = data.certsSubtitle;
+  renderExperience(data);
+  renderSkills(data);
+  renderCerts(data);
+}
+
+function navigateTo(hash) {
+  const known = ["#profile", "#experience", "#skills", "#education", "#certs"];
+  const target = known.indexOf(hash) === -1 ? "#profile" : hash;
+  document.querySelectorAll(".section").forEach((section) => {
+    section.classList.toggle("active", "#" + section.id === target);
+  });
+  document.querySelectorAll(".nav-link").forEach((link) => {
+    const on = link.getAttribute("href") === target;
+    link.classList.toggle("bg-sky-100", on);
+    link.classList.toggle("text-sky-800", on);
+    link.classList.toggle("font-bold", on);
+  });
+  if (window.innerWidth < 768) {
+    document.getElementById("sidebar-nav").classList.add("hidden");
+    document.getElementById("sidebar-role").classList.add("hidden");
+  }
+}
+
+document.getElementById("lang-toggle-es").addEventListener("click", () => {
+  currentLang = "es";
+  updateContent(currentLang);
+  document.getElementById("lang-toggle-es").className = "px-3 py-1 mr-0 md:mr-2 rounded-full font-semibold text-sm bg-sky-600 text-white transition-colors duration-200";
+  document.getElementById("lang-toggle-en").className = "px-3 py-1 rounded-full text-sm font-semibold bg-slate-200 text-slate-700 transition-colors duration-200";
+});
+document.getElementById("lang-toggle-en").addEventListener("click", () => {
+  currentLang = "en";
+  updateContent(currentLang);
+  document.getElementById("lang-toggle-en").className = "px-3 py-1 rounded-full font-semibold text-sm bg-sky-600 text-white transition-colors duration-200";
+  document.getElementById("lang-toggle-es").className = "px-3 py-1 mr-0 md:mr-2 rounded-full font-semibold text-sm bg-slate-200 text-slate-700 transition-colors duration-200";
+});
+document.querySelectorAll(".nav-link").forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    const hash = link.getAttribute("href");
+    history.pushState(null, "", hash);
+    navigateTo(hash);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+});
+window.addEventListener("popstate", () => navigateTo(location.hash || "#profile"));
+document.getElementById("mobile-menu-button").addEventListener("click", () => {
+  document.getElementById("sidebar-nav").classList.toggle("hidden");
+  document.getElementById("sidebar-role").classList.toggle("hidden");
+});
+document.getElementById("print-cv-button").addEventListener("click", () => {
+  const closed = [];
+  document.querySelectorAll(".assign-body").forEach((body) => {
+    if (!body.classList.contains("open")) closed.push(body);
+    body.classList.add("open");
+  });
+  setTimeout(() => window.print(), 200);
+  window.addEventListener("afterprint", () => {
+    closed.forEach((body) => body.classList.remove("open"));
+  }, { once: true });
+});
+document.getElementById("diploma-close").addEventListener("click", closeDiploma);
+document.getElementById("diploma-modal").addEventListener("click", (event) => {
+  if (event.target.id === "diploma-modal") closeDiploma();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeDiploma();
+});
+
+const params = new URLSearchParams(location.search);
+if (params.get("lang") === "en") {
+  currentLang = "en";
+  document.getElementById("lang-toggle-en").className = "px-3 py-1 rounded-full font-semibold text-sm bg-sky-600 text-white transition-colors duration-200";
+  document.getElementById("lang-toggle-es").className = "px-3 py-1 mr-0 md:mr-2 rounded-full font-semibold text-sm bg-slate-200 text-slate-700 transition-colors duration-200";
+}
+try { history.replaceState(null, "", "#profile"); } catch (error) {}
+updateContent(currentLang);
+navigateTo("#profile");
+</script>
 </body>
 </html>
