@@ -225,7 +225,30 @@ const content = {
             time: "Agosto 2025 – actualidad · Clientes de Estados Unidos",
             problem: "Las tiendas DTC necesitaban automatizar pedidos, inventario, fulfillment y devoluciones, e integrar ERP, 3PL, impuestos, ShipBob, Passport y Redo.",
             built: "Construí la mayoría de los nodos custom de n8n. Desarrollo los flujos y participo en las pruebas, las iteraciones y el soporte. También escribo PRD, alcance y criterios de aceptación, hago QA del tema contra el diseño aprobado en Figma y definí el flujo de un retainer de mantenimiento. Coordino un squad de front, back y diseño, y participo en el scrum de Norteamérica.",
-            result: "Tiendas construidas y migradas en Shopline: Drink Hippie, Evil Genius, Genetix Organic, Pablo's Mate, Talons, Tampons Tribe y Undefined. Integraciones realizadas: Jay Group, Passport, Shippo, AccelPay, ShipBob, Fishbowl, Katana, QuickBooks, Printful, Redo y Numeral."
+            storesTitle: "Tiendas",
+            stores: [
+              { name: "Drink Hippie", note: "Desarrollo completo de la tienda." },
+              { name: "Evil Genius", note: "Desarrollo completo de la tienda." },
+              { name: "Genetix Organic", note: "Participé en la gestión de todo lo relacionado. No hice el diseño." },
+              { name: "Pablo's Mate", note: "La tienda se hizo desde cero, con diseño y desarrollo. Yo no lo hice: lo coordiné." },
+              { name: "Talons", note: "Desarrollo total de la tienda y la integración 3PL con Passport y Jay Group. Participé en la gestión y en el desarrollo." },
+              { name: "Tampons Tribe", note: "Diseño y desarrollo de la tienda." },
+              { name: "Undefined", note: "Diseño y desarrollo de la tienda." }
+            ],
+            integrationsTitle: "Integraciones",
+            integrations: [
+              { name: "Jay Group", note: "Pedidos, productos, inventario y fulfillment. Hice el PRD y participé en el desarrollo del nodo custom de n8n y de los flujos." },
+              { name: "Passport", note: "Envíos. Hice el PRD y participé en el desarrollo del nodo custom de n8n y de los flujos." },
+              { name: "Shippo", note: "Envíos con varias paqueterías. Solo hice el PRD y la gestión." },
+              { name: "AccelPay", note: "Pagos y fulfillment. Hice el PRD y coordiné el desarrollo." },
+              { name: "ShipBob", note: "Hice el PRD y coordiné el desarrollo." },
+              { name: "Fishbowl", note: "Hice el PRD y coordiné el desarrollo." },
+              { name: "Katana", note: "La hice yo: PRD, nodo custom de n8n y flujos." },
+              { name: "QuickBooks", note: "Hice el PRD, coordiné el desarrollo y participé en las pruebas." },
+              { name: "Printful", note: "Sincronización de productos. Hice el PRD, coordiné el desarrollo y participé en las pruebas." },
+              { name: "Redo", note: "Devoluciones y regreso de inventario a la tienda. Hice el PRD, coordiné el desarrollo y participé en las pruebas." },
+              { name: "Numeral", note: "Hice el PRD, coordiné el desarrollo y participé en las pruebas." }
+            ]
           },
           {
             title: "USAVIONICS",
@@ -522,7 +545,30 @@ const content = {
             time: "August 2025 – present · Clients in the United States",
             problem: "DTC stores needed orders, inventory, fulfillment, and returns automated, and ERP, 3PL, tax, ShipBob, Passport, and Redo connected.",
             built: "I built most of the custom n8n nodes. I develop the flows and take part in the tests, the iterations, and the support. I also write PRDs, scope, and acceptance criteria, QA the theme against the approved Figma design, and defined a maintenance-retainer flow. I coordinate a squad of front end, back end, and design, and I take part in the North America scrum.",
-            result: "Stores built and migrated on Shopline: Drink Hippie, Evil Genius, Genetix Organic, Pablo's Mate, Talons, Tampons Tribe, and Undefined. Integrations delivered: Jay Group, Passport, Shippo, AccelPay, ShipBob, Fishbowl, Katana, QuickBooks, Printful, Redo, and Numeral."
+            storesTitle: "Stores",
+            stores: [
+              { name: "Drink Hippie", note: "I did the full development of the store." },
+              { name: "Evil Genius", note: "I did the full development of the store." },
+              { name: "Genetix Organic", note: "I took part in managing everything related to it. I did not do the design." },
+              { name: "Pablo's Mate", note: "The store was built from scratch, with design and development. I did not build it: I coordinated it." },
+              { name: "Talons", note: "Full development of the store and the 3PL integration with Passport and Jay Group. I took part in the management and in the development." },
+              { name: "Tampons Tribe", note: "I designed and developed the store." },
+              { name: "Undefined", note: "I designed and developed the store." }
+            ],
+            integrationsTitle: "Integrations",
+            integrations: [
+              { name: "Jay Group", note: "Orders, products, inventory, and fulfillment. I wrote the PRD and took part in building the custom n8n node and the flows." },
+              { name: "Passport", note: "Shipping. I wrote the PRD and took part in building the custom n8n node and the flows." },
+              { name: "Shippo", note: "Multi-carrier shipping. I wrote the PRD and managed it." },
+              { name: "AccelPay", note: "Payments and fulfillment. I wrote the PRD and coordinated the development." },
+              { name: "ShipBob", note: "I wrote the PRD and coordinated the development." },
+              { name: "Fishbowl", note: "I wrote the PRD and coordinated the development." },
+              { name: "Katana", note: "I built this integration: the PRD, the custom n8n node, and the flows." },
+              { name: "QuickBooks", note: "I wrote the PRD, coordinated the development, and took part in the testing." },
+              { name: "Printful", note: "Product sync. I wrote the PRD, coordinated the development, and took part in the testing." },
+              { name: "Redo", note: "Returns and inventory back to the store. I wrote the PRD, coordinated the development, and took part in the testing." },
+              { name: "Numeral", note: "I wrote the PRD, coordinated the development, and took part in the testing." }
+            ]
           },
           {
             title: "USAVIONICS",
@@ -800,7 +846,7 @@ function namedList(title, rows) {
   rows.forEach((row) => {
     const li = el("li", "text-slate-600");
     li.appendChild(el("span", "font-semibold text-slate-800", row.name));
-    if (row.note) li.appendChild(document.createTextNode(" — " + row.note));
+    if (row.note) li.appendChild(document.createTextNode(". " + row.note));
     ul.appendChild(li);
   });
   box.appendChild(ul);
