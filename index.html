@@ -382,7 +382,7 @@ const content = {
           {
             title: "Dirección General del Servicio Público de Localización Telefónica (LOCATEL)",
             time: "Enero 2007 – noviembre 2013 · Coyoacán",
-            detail: "Encargado de área (Tramitel) y operador telefónico. Atención a quejas, coordinación de turno, asesoría de trámites y administración."
+            detail: "Encargado de área (Tramitel) y operador telefónico. Atención a quejas, coordinación de turno, asesoría de trámites y administración.\nMedalla de LOCATEL por los 30 años de la institución, agosto de 2012."
           },
           {
             title: "Instituto Federal Electoral",
@@ -702,7 +702,7 @@ const content = {
           {
             title: "Dirección General del Servicio Público de Localización Telefónica (LOCATEL)",
             time: "January 2007 – November 2013 · Coyoacán",
-            detail: "Area lead (Tramitel) and telephone operator. Complaint handling, shift coordination, guidance on procedures, and administration."
+            detail: "Area lead (Tramitel) and telephone operator. Complaint handling, shift coordination, guidance on procedures, and administration.\nLOCATEL medal for the institution's 30th anniversary, August 2012."
           },
           {
             title: "Instituto Federal Electoral",
@@ -889,7 +889,11 @@ function renderExperience(data) {
         btn.appendChild(chev);
         btn.appendChild(label);
         const body = el("div", "assign-body px-4 pb-4" + (account.open ? " open" : ""));
-        if (account.detail) body.appendChild(el("p", "text-slate-600", account.detail));
+        if (account.detail) {
+          account.detail.split("\n").forEach((line, i) => {
+            body.appendChild(el("p", (i ? "mt-2 " : "") + "text-slate-600", line));
+          });
+        }
         else body.appendChild(caseBlock(account, data.caseLabels));
         const stores = namedList(account.storesTitle, account.stores);
         const integrations = namedList(account.integrationsTitle, account.integrations);
