@@ -93,7 +93,7 @@
                 <span>·</span>
                 <a href="https://github.com/jonathanrhernandez" target="_blank" class="hover:text-sky-600 transition-colors duration-200">GitHub</a>
                 <span>·</span>
-                <a href="https://jonathanrhernandez.github.io/resume/" class="hover:text-sky-600 transition-colors duration-200">jonathanrhernandez.github.io/resume</a>
+                <a id="profile-site" href="https://jonathanrhernandez.github.io/resume/" class="hover:text-sky-600 transition-colors duration-200">Online CV</a>
               </div>
               <div class="mt-2">
                 <a id="profile-pdf" class="text-sm text-sky-700 hover:text-sky-900 transition-colors duration-200" href="cv/CV-Jonathan-Hernandez-ES.pdf"></a>
@@ -194,6 +194,7 @@ const content = {
     menuLabel: "Menú",
     langLabel: "Idioma",
     pdfLabel: "CV de dos páginas",
+    siteLabel: "CV en línea",
     pdfHref: "cv/CV-Jonathan-Hernandez-ES.pdf",
     close: "Cerrar",
     viewDiploma: "Ver diploma",
@@ -515,6 +516,7 @@ const content = {
     menuLabel: "Menu",
     langLabel: "Language",
     pdfLabel: "Two-page CV",
+    siteLabel: "Online CV",
     pdfHref: "cv/CV-Jonathan-Hernandez-EN.pdf",
     close: "Close",
     viewDiploma: "View diploma",
@@ -1016,6 +1018,7 @@ function updateContent(lang) {
   document.getElementById("diploma-close").textContent = data.close;
   const pdf = document.getElementById("profile-pdf");
   pdf.textContent = data.pdfLabel;
+  document.getElementById("profile-site").textContent = data.siteLabel;
   pdf.href = data.pdfHref;
   ["nav-profile", "nav-experience", "nav-skills", "nav-education", "nav-certs"].forEach((id, i) => {
     document.getElementById(id).textContent = data.nav[i];
