@@ -102,7 +102,7 @@
                 <p>hernandezgonzalezjonathanruben@gmail.com</p>
                 <p>https://www.linkedin.com/in/jonathan-ruben-hernandez-gonzalez-5127bb57/</p>
                 <p>https://github.com/jonathanrhernandez</p>
-                <p>https://jonathanrhernandez.github.io/resume/</p>
+                <p><a id="print-site" href="https://jonathanrhernandez.github.io/resume/">Online CV</a></p>
               </div>
               <p class="mt-2 text-sm text-slate-500" id="profile-language"></p>
             </div>
@@ -1019,6 +1019,7 @@ function updateContent(lang) {
   const pdf = document.getElementById("profile-pdf");
   pdf.textContent = data.pdfLabel;
   document.getElementById("profile-site").textContent = data.siteLabel;
+  document.getElementById("print-site").textContent = data.siteLabel;
   pdf.href = data.pdfHref;
   ["nav-profile", "nav-experience", "nav-skills", "nav-education", "nav-certs"].forEach((id, i) => {
     document.getElementById(id).textContent = data.nav[i];
